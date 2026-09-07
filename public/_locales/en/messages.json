@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "Download Classify"
+  },
+  "extensionDescription": {
+    "message": "Track download sources and classify files into target folders"
+  }
+}

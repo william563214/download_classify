@@ -1,0 +1,20 @@
+{
+  "name": "download-classify",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "npm run build && uv run --with playwright python .temp/tests/run_browser_test.py",
+    "test:serve": "uv run python .temp/tests/serve_mock_sites.py",
+    "install:edge": "npm run build && bash .temp/scripts/install-edge.sh"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "vite-plugin-web-extension": "^4.4.4"
+  }
+}

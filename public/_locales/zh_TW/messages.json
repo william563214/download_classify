@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "下載分類助手"
+  },
+  "extensionDescription": {
+    "message": "自動追蹤下載來源並依規則分類到目標資料夾"
+  }
+}

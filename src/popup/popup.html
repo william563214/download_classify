@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>下載分類助手</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>下載分類助手</h1>
+      <a href="#" id="open-options">設定</a>
+    </header>
+
+    <section id="current-site-section">
+      <h2>當前網站</h2>
+      <div id="current-site-host" class="site-host">載入中...</div>
+      <div id="current-site-classification" class="site-status-block"></div>
+      <form id="site-classify-form" class="site-classify-form hidden">
+        <label class="field">
+          顯示名稱
+          <input type="text" id="site-rule-name" />
+        </label>
+        <label class="field">
+          目標資料夾
+          <input type="text" id="site-rule-folder" placeholder="例如 Social/Threads" />
+        </label>
+        <label class="field">
+          匹配方式
+          <select id="site-rule-match-target">
+            <option value="source">來源網站（從此頁下載）</option>
+            <option value="download">下載網站</option>
+            <option value="either">來源或下載網站</option>
+          </select>
+        </label>
+        <input type="hidden" id="site-rule-id" />
+        <input type="hidden" id="site-rule-host" />
+        <p id="site-save-status" class="site-save-status"></p>
+        <button type="submit" class="primary-btn">儲存網站分類</button>
+      </form>
+      <div id="current-site-attribution" class="site-status-block"></div>
+    </section>
+
+    <section id="unclassified-section">
+      <h2>待分類下載</h2>
+      <ul id="unclassified-list"></ul>
+    </section>
+
+    <section id="stats-section">
+      <h2>今日分類</h2>
+      <ul id="stats-list"></ul>
+    </section>
+
+    <section id="recent-section">
+      <h2>最近下載</h2>
+      <ul id="recent-list"></ul>
+    </section>
+
+    <script type="module" src="popup.ts"></script>
+  </body>
+</html>

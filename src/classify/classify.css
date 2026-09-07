@@ -1,0 +1,166 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  background: #f7f8fa;
+}
+
+header {
+  margin-bottom: 12px;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+
+p {
+  margin: 0;
+  color: #555;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.hidden {
+  display: none;
+}
+
+dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 6px 10px;
+}
+
+dt {
+  color: #666;
+}
+
+dd {
+  margin: 0;
+  word-break: break-all;
+}
+
+.field {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.field input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+fieldset {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 0 0 10px;
+}
+
+legend {
+  padding: 0 4px;
+}
+
+.check {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.check span {
+  color: #333;
+  word-break: break-all;
+}
+
+.note {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.error {
+  color: #a4262c;
+  font-size: 12px;
+}
+
+footer {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+button.primary {
+  background: #0078d4;
+  border-color: #0078d4;
+  color: #fff;
+}
+
+#loading,
+#not-found {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.attribution-list {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attribution-option {
+  display: block;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.attribution-option input {
+  margin-right: 8px;
+}
+
+.attribution-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.attribution-meta {
+  display: block;
+  font-size: 11px;
+  color: #666;
+  word-break: break-all;
+  margin-left: 22px;
+}
