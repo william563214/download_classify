@@ -144,3 +144,7 @@ npm run install:edge # build 後提示於 Edge 載入 dist
 ## 上架
 
 素材位於 `store/`，見 `store/README.md`。
+
+- 擴充功能圖示：`public/icons/icon{16,32,48,128}.png`（向量原稿 `public/icons/icon.svg`）
+- 商店 logo：`store/icons/icon300.png`
+- 商店截圖（1280×800）：`store/screenshots/01`–`05`（詳見 `store/README.md`）

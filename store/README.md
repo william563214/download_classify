@@ -7,6 +7,54 @@ npm run build
 cd dist && zip -r ../store/download-classify.zip .
 ```
 
+## 圖示
+
+擴充功能圖示（`manifest` / toolbar）：
+
+| 檔案 | 尺寸 | 用途 |
+|---|---|---|
+| `public/icons/icon16.png` | 16×16 | toolbar / favicon |
+| `public/icons/icon32.png` | 32×32 | Windows / Retina toolbar |
+| `public/icons/icon48.png` | 48×48 | 擴充功能管理頁 |
+| `public/icons/icon128.png` | 128×128 | Chrome / Edge 套件圖示 |
+| `public/icons/icon.svg` | 向量原稿 | 重新匯出 PNG 用 |
+
+商店 logo（Edge Add-ons 常見要求）：
+
+| 檔案 | 尺寸 |
+|---|---|
+| `store/icons/icon300.png` | 300×300 |
+
+圖示為自製「下載箭頭 + 資料夾／分類」標記，無第三方商標。
+
+重新產生 PNG（可選）：
+
+```bash
+uv run --with playwright python -m playwright install chromium
+uv run --with playwright python .temp/scripts/render_icons.py
+```
+
+## 螢幕截圖
+
+路徑：`store/screenshots/`，尺寸 1280×800（Edge 建議常見規格）。
+
+| 檔案 | 內容 |
+|---|---|
+| `store/screenshots/01-popup-site-classify.png` | Popup 當前網站分類與快速設定 |
+| `store/screenshots/02-popup-recent-stats.png` | Popup 最近下載與今日統計 |
+| `store/screenshots/03-options-rules.png` | Options 網站分類與自定義規則 |
+| `store/screenshots/04-prompt-classify-attribution.png` | 詢問頁（分類 + 歸因） |
+| `store/screenshots/05-explorer-classified.png` | 下載後檔案已分類至子資料夾 |
+
+**來源說明**：本批截圖為依實際 UI 樣式製作的靜態 mock（非瀏覽器 live 擴充功能擷取），內容對應真實介面與本機隱私承諾，不含上傳／遙測。
+
+重新產生截圖（可選）：
+
+```bash
+uv run --with playwright python -m playwright install chromium
+uv run --with playwright python .temp/scripts/capture_store_screenshots.py
+```
+
 ## 商店描述（繁體中文）
 
 **名稱**：下載分類助手
@@ -43,14 +91,6 @@ cd dist && zip -r ../store/download-classify.zip .
 ## 隱私政策摘要
 
 不收集、不傳輸、不出售個人資料。規則與紀錄存於 `chrome.storage` 與 IndexedDB。
-
-## 螢幕截圖建議
-
-1. Popup 當前網站分類與快速設定
-2. Popup 最近下載與今日統計
-3. Options 網站分類與自定義規則
-4. 詢問頁（分類 + 歸因）
-5. 下載後檔案已分類至子資料夾的檔案總管畫面
 
 ## 審核注意事項
 
