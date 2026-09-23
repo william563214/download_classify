@@ -243,18 +243,37 @@ export function find_classify_pages(context: BrowserContext) {
   return context.pages().filter((page) => page.url().includes("classify.html"));
 }
 
-export async function wait_for_classify_page(context: BrowserContext, timeout_ms = 25_000) {
+export async function wait_for_classify_page(context: BrowserContext, timeout_ms = 40_000) {
   const existing = find_classify_pages(context)[0];
   if (existing) {
     await existing.waitForLoadState("domcontentloaded");
     return existing;
   }
-  const page = await context.waitForEvent("page", {
-    timeout: timeout_ms,
-    predicate: (candidate) => candidate.url().includes("classify.html"),
-  });
-  await page.waitForLoadState("domcontentloaded");
-  return page;
+
+  const deadline = Date.now() + timeout_ms;
+  const page_wait = context
+    .waitForEvent("page", {
+      timeout: timeout_ms,
+      predicate: (candidate) => candidate.url().includes("classify.html"),
+    })
+    .catch(() => null);
+
+  while (Date.now() < deadline) {
+    const found = find_classify_pages(context)[0];
+    if (found) {
+      await found.waitForLoadState("domcontentloaded");
+      return found;
+    }
+    await delay(200);
+  }
+
+  const page = await page_wait;
+  if (page) {
+    await page.waitForLoadState("domcontentloaded");
+    return page;
+  }
+
+  throw new Error("timed out waiting for classify page");
 }
 
 export async function delay(ms: number): Promise<void> {

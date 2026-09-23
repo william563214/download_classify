@@ -95,14 +95,14 @@ test.describe("e2e E1-E4", () => {
       });
 
       await trigger_download_and_wait(mock_hosts.fanbox, context);
-      const classify_page = await wait_for_classify_page(context);
-      await expect(classify_page.locator("#page-title")).toContainText(/分類|Classify/);
-
       const record = await wait_for_download_record(
         service_worker,
         (item) => String(item.download_site || "").includes("fanbox")
       );
       expect(record.is_unclassified).toBe(true);
+
+      const classify_page = await wait_for_classify_page(context);
+      await expect(classify_page.locator("#page-title")).toContainText(/分類|Classify/);
     } finally {
       await context.close();
       fs.rmSync(user_data_dir, { recursive: true, force: true });
