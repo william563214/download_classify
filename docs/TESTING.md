@@ -70,11 +70,11 @@
 |---|---|---|---|
 | E1 | 已設網站分類後下載 | 檔案進對應子資料夾；不彈分類詢問 | `tests/e2e/e1-e4.spec.ts` |
 | E2 | 未分類下載（提示開啟） | 完成後出現分類詢問 | 同上 |
-| E3 | 詢問中建規則後再下同站 | 後續命中規則；路徑正確 | 同上 |
-| E4 | 歸因詢問站 A→B | 顯示候選；確認後寫歸因；**不搬已下載檔** | 同上 |
-| E5 | 非歸因詢問站下載 | 不彈歸因詢問 | 未實作 |
-| E6 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 未實作 |
-| E7 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 未實作 |
+| E3 | 詢問中建規則後再下同站 | 後續命中規則；**存規則不搬已下載檔** | `tests/e2e/e1-e4.spec.ts`（硬斷言） |
+| E4 | 歸因詢問站 A→B | 顯示候選；確認後寫歸因；**不搬已下載檔** | 同上（硬斷言，不可軟過） |
+| E5 | 非歸因詢問站下載 | 不彈歸因詢問 | 暫緩：非 #1 P0 硬規則；追蹤後續 issue／PR |
+| E6 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 暫緩：同上 |
+| E7 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 暫緩：同上 |
 
 ## 7. 目錄與 scripts
 
@@ -89,11 +89,20 @@ tests/
 | script | 用途 |
 |---|---|
 | `test:unit` | Vitest L1 |
-| `test:e2e` | Playwright；先 build，經 `xvfb-run` 載入 `dist`（無顯示環境） |
+| `test:e2e` | `scripts/run-e2e.sh`：先 build，再 Playwright 載入 `dist` |
 | `test:serve` | 本機固定網域模擬站（預設埠 `18765`） |
 | `install:edge` | build 後提示於 Edge 手動載入 `dist/` |
 
-本機已有顯示時可設 `E2E_HEADED=1` 再跑 Playwright（略過 headless）。
+### 顯示／xvfb（不要硬綁）
+
+| 環境 | 行為 |
+|---|---|
+| 已有 `DISPLAY`（本機 GUI、macOS／Windows 桌面） | 直接 `playwright test` |
+| `E2E_HEADED=1` | 強制 headed |
+| Linux 無 `DISPLAY` 且有 `xvfb-run` | 自動 `xvfb-run -a playwright test` |
+| 其他（無 xvfb） | 嘗試 `headless=new`；若擴充載入失敗再安裝 xvfb |
+
+CI（`.github/workflows/ci.yml`）在 Ubuntu 安裝 xvfb 後跑 e2e；`typecheck`／`build`／`test:unit` 為必跑。
 
 ### 模擬站網域
 
@@ -101,12 +110,20 @@ Chrome 啟動參數會把下列主機指到 `127.0.0.1`：
 
 - `fantia.test` / `fanbox.test` / `mega.test` / `forum.test`
 
-### Edge／CI 限制
+### 不搬檔硬斷言（E3／E4）
 
-- 自動化路徑以 **Chromium + 擴充功能載入** 為準（`npm run test:e2e` 內建 `xvfb-run`）
-- Microsoft Edge 專用安裝腳本未在無 Edge 的 CI／VM 驗證；請用 `npm run install:edge` 的手動步驟
-- Playwright 可能攔截下載串流，因此 E1／E3 以擴充 IndexedDB 分類紀錄（`target_folder`／`is_unclassified`）為斷言來源，而非僅依賴下載路徑字串
-- 若環境無法行使 `chrome.downloads`／彈窗 API，e2e 會失敗；此時至少應維持 `typecheck`／`build`／`test:unit` 綠燈
+確認歸因或儲存規則之後，測試必須：
+
+1. 取得動作前 `chrome.downloads` 的 `id` + 非空 `filename`
+2. 動作後同一 `id` 的 `filename` **完全相同**（不可 `if` 軟過）
+3. probe 未呼叫 `chrome.downloads.move`／`erase`
+4. Playwright `saveAs` 副本仍存在且大小不變
+
+### Edge／其他限制
+
+- 自動化路徑以 **Chromium 擴充功能載入** 為準
+- Microsoft Edge：`npm run install:edge` 手動載入 `dist/`（無 Edge 的 CI／VM 未驗證）
+- Playwright 可能攔截下載串流，分類結果以 IndexedDB 紀錄為準；**不搬檔**仍以 `chrome.downloads.filename` 前後相等為硬條件
 
 ## 8. 與 ROADMAP／Issues 對齊
 

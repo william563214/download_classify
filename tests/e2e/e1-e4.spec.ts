@@ -2,12 +2,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
 import {
+  assert_download_not_moved,
   delay,
   get_chrome_downloads,
   get_download_records,
   get_local_storage,
+  install_download_mutation_probe,
   launch_extension_context,
   mock_hosts,
+  require_chrome_download,
   seed_storage,
   trigger_download_and_wait,
   wait_for_classify_page,
@@ -59,8 +62,6 @@ test.describe("e2e E1-E4", () => {
       expect(record.is_unclassified).toBe(false);
       expect(String(record.matched_rule_id)).toContain("site:");
 
-      // Playwright may intercept the download stream so chrome.downloads.filename
-      // can point at an artifact path rather than Sites/Fantia — record is source of truth
       const chrome_downloads = await get_chrome_downloads(service_worker);
       expect(chrome_downloads.some((item) => item.url.includes("fantia.test"))).toBe(true);
 
@@ -108,7 +109,7 @@ test.describe("e2e E1-E4", () => {
     }
   });
 
-  test("E3 saving domain rule classifies the next download", async () => {
+  test("E3 saving domain rule classifies next download and does not move saved file", async () => {
     const { context, service_worker, user_data_dir, extension_id } =
       await launch_extension_context();
     try {
@@ -128,10 +129,19 @@ test.describe("e2e E1-E4", () => {
           history_imported: true,
         },
       });
+      await install_download_mutation_probe(service_worker);
 
-      await trigger_download_and_wait(mock_hosts.fanbox, context);
+      const first = await trigger_download_and_wait(mock_hosts.fanbox, context);
+      const saved_path = path.join(user_data_dir, "e3-first.bin");
+      await first.download.saveAs(saved_path);
+      expect(fs.existsSync(saved_path)).toBe(true);
+      const size_before = fs.statSync(saved_path).size;
+      expect(size_before).toBeGreaterThan(0);
+
+      const path_before = await require_chrome_download(service_worker, "fanbox.test");
+      expect(path_before.filename.length).toBeGreaterThan(0);
+
       const classify_page = await wait_for_classify_page(context);
-
       await classify_page.locator("#rule-name").fill("FANBOX");
       await classify_page.locator("#rule-folder").fill("Sites/FANBOX");
       await classify_page.locator("#match-download-site").check();
@@ -148,6 +158,11 @@ test.describe("e2e E1-E4", () => {
         })
         .toBe(true);
 
+      // hard rule: saving a rule must not move the already-downloaded file
+      await assert_download_not_moved(service_worker, path_before);
+      expect(fs.existsSync(saved_path)).toBe(true);
+      expect(fs.statSync(saved_path).size).toBe(size_before);
+
       for (const page of find_classify_pages(context)) {
         await page.close().catch(() => undefined);
       }
@@ -159,6 +174,11 @@ test.describe("e2e E1-E4", () => {
       );
       expect(record.target_folder).toBe("Sites/FANBOX");
       expect(record.is_unclassified).toBe(false);
+
+      // first download path must still be unchanged after the second download
+      await assert_download_not_moved(service_worker, path_before);
+      expect(fs.existsSync(saved_path)).toBe(true);
+      expect(fs.statSync(saved_path).size).toBe(size_before);
 
       await delay(1500);
       expect(find_classify_pages(context).length).toBe(0);
@@ -188,6 +208,7 @@ test.describe("e2e E1-E4", () => {
           history_imported: true,
         },
       });
+      await install_download_mutation_probe(service_worker);
 
       const forum_page = await context.newPage();
       await forum_page.goto(mock_hosts.forum, { waitUntil: "domcontentloaded" });
@@ -201,16 +222,17 @@ test.describe("e2e E1-E4", () => {
       ]);
       const saved_path = path.join(user_data_dir, "e4-before.bin");
       await download.saveAs(saved_path);
+      expect(fs.existsSync(saved_path)).toBe(true);
       const size_before = fs.statSync(saved_path).size;
-      const downloads_before = await get_chrome_downloads(service_worker);
-      const mega_before = downloads_before.find((item) => item.url.includes("mega.test"));
-      const path_before = mega_before?.filename ?? "";
+      expect(size_before).toBeGreaterThan(0);
+
+      const path_before = await require_chrome_download(service_worker, "mega.test");
+      expect(path_before.filename.length).toBeGreaterThan(0);
 
       const classify_page = await wait_for_classify_page(context);
       await expect(classify_page.locator("#page-title")).toContainText(/歸因/);
       await expect(classify_page.locator('input[name="attribution-choice"]')).not.toHaveCount(0);
 
-      // prefer A-site (forum) candidate over download-host fallback
       const radios = classify_page.locator('input[name="attribution-choice"]');
       const radio_count = await radios.count();
       let selected_forum = false;
@@ -239,11 +261,8 @@ test.describe("e2e E1-E4", () => {
         })
         .toBe("forum.test");
 
-      const downloads_after = await get_chrome_downloads(service_worker);
-      const mega_after = downloads_after.find((item) => item.url.includes("mega.test"));
-      if (path_before && mega_after?.filename) {
-        expect(mega_after.filename).toBe(path_before);
-      }
+      // hard rule: confirm attribution must not move the downloaded file
+      await assert_download_not_moved(service_worker, path_before);
       expect(fs.existsSync(saved_path)).toBe(true);
       expect(fs.statSync(saved_path).size).toBe(size_before);
     } finally {

@@ -48,9 +48,10 @@ export async function launch_extension_context(): Promise<{
 
   const headed = process.env.E2E_HEADED === "1" || Boolean(process.env.DISPLAY);
   const context = await chromium.launchPersistentContext(user_data_dir, {
-    // MV3 extensions need a real display path use xvfb-run for CI
+    // MV3 extensions: prefer headed/xvfb; otherwise try headless=new
     headless: !headed,
     acceptDownloads: true,
+    downloadsPath: downloads_dir,
     args: [
       `--disable-extensions-except=${dist_path()}`,
       `--load-extension=${dist_path()}`,
@@ -121,18 +122,104 @@ export async function get_download_records(
   });
 }
 
+export type chrome_download_snapshot = {
+  id: number;
+  filename: string;
+  url: string;
+  state: string;
+};
+
 export async function get_chrome_downloads(
   service_worker: Worker
-): Promise<Array<{ id: number; filename: string; url: string; state: string }>> {
+): Promise<chrome_download_snapshot[]> {
   return service_worker.evaluate(async () => {
     const items = await chrome.downloads.search({});
     return items.map((item) => ({
       id: item.id,
-      filename: item.filename,
+      filename: item.filename ?? "",
       url: item.url,
       state: item.state ?? "",
     }));
   });
+}
+
+export async function require_chrome_download(
+  service_worker: Worker,
+  url_substr: string,
+  timeout_ms = 20_000
+): Promise<chrome_download_snapshot> {
+  const started = Date.now();
+  while (Date.now() - started < timeout_ms) {
+    const items = await get_chrome_downloads(service_worker);
+    const match = items.find((item) => item.url.includes(url_substr) && item.filename);
+    if (match) {
+      return match;
+    }
+    await delay(250);
+  }
+  throw new Error(`timed out waiting for chrome.downloads item containing ${url_substr}`);
+}
+
+export async function install_download_mutation_probe(service_worker: Worker): Promise<void> {
+  await service_worker.evaluate(() => {
+    const g = globalThis as typeof globalThis & {
+      __dc_download_mutations?: Array<{ api: string; args: unknown[] }>;
+    };
+    g.__dc_download_mutations = [];
+    const downloads = chrome.downloads as typeof chrome.downloads & {
+      move?: (...args: unknown[]) => unknown;
+      erase?: (...args: unknown[]) => unknown;
+    };
+    for (const api of ["move", "erase"] as const) {
+      const original = downloads[api];
+      if (typeof original !== "function") {
+        continue;
+      }
+      downloads[api] = ((...args: unknown[]) => {
+        g.__dc_download_mutations!.push({ api, args });
+        return (original as (...inner: unknown[]) => unknown).apply(downloads, args);
+      }) as typeof original;
+    }
+  });
+}
+
+export async function get_download_mutations(
+  service_worker: Worker
+): Promise<Array<{ api: string; args: unknown[] }>> {
+  return service_worker.evaluate(() => {
+    const g = globalThis as typeof globalThis & {
+      __dc_download_mutations?: Array<{ api: string; args: unknown[] }>;
+    };
+    return g.__dc_download_mutations ?? [];
+  });
+}
+
+/** Hard assert: confirm-attribution / save-rule must not relocate the completed download. */
+export async function assert_download_not_moved(
+  service_worker: Worker,
+  before: chrome_download_snapshot
+): Promise<void> {
+  if (!before.filename) {
+    throw new Error("assert_download_not_moved requires a non-empty before.filename");
+  }
+  const after_items = await get_chrome_downloads(service_worker);
+  const after = after_items.find((item) => item.id === before.id);
+  if (!after) {
+    throw new Error(`download id ${before.id} disappeared after action (possible erase/move)`);
+  }
+  if (!after.filename) {
+    throw new Error(`download id ${before.id} lost filename after action`);
+  }
+  if (after.filename !== before.filename) {
+    throw new Error(
+      `download path changed after action (must not move file):\n before: ${before.filename}\n after:  ${after.filename}`
+    );
+  }
+  const mutations = await get_download_mutations(service_worker);
+  const forbidden = mutations.filter((item) => item.api === "move" || item.api === "erase");
+  if (forbidden.length) {
+    throw new Error(`forbidden chrome.downloads mutations: ${JSON.stringify(forbidden)}`);
+  }
 }
 
 export async function wait_for_download_record(
