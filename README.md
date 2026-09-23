@@ -117,6 +117,8 @@ Content Script 記錄：
 
 ## 開發
 
+測試計畫見 [`docs/TESTING.md`](docs/TESTING.md)。
+
 ```bash
 npm run dev          # 監聽建置
 npm run test:e2e     # Playwright 測試
