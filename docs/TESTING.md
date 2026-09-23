@@ -1,6 +1,12 @@
 # 測試計畫
 
-本文件為約定測試設計與執行說明。對齊 [#1](https://github.com/william563214/download_classify/issues/1)。
+本文件為約定測試設計與執行說明（**以此為準**；[PR #16](https://github.com/william563214/download_classify/pull/16) 僅文件草案已關閉／由本文件承接）。對齊 [#1](https://github.com/william563214/download_classify/issues/1)。
+
+## 0. 資料僅本機／不上傳
+
+- 擴充功能執行期資料（規則、設定、下載紀錄、歸因暫存）**只寫本機**瀏覽器儲存（`chrome.storage`／IndexedDB），**不上傳**外部伺服器。詳見 README「隱私」與 [`store/PRIVACY.md`](../store/PRIVACY.md)。
+- 測試同樣不需雲端：模擬站與 fixtures 在本機 `tests/`；e2e 使用臨時 `user-data-dir`。
+- **`.temp/`**：僅本機開發／除錯用暫存目錄（已 gitignore）。**不是**雲端路徑、**不是**正式 fixtures 來源。版控以 `tests/fixtures`／`tests/helpers` 為準；可選把本機 scratch 放進 `.temp/`，CI 與乾淨 clone **不依賴**它。
 
 ## 1. 現況
 
@@ -10,13 +16,14 @@
 | `npm run test:unit` | Vitest；覆蓋 matcher／classifier／unclassified／filename |
 | `npm run test:e2e` | Playwright；先 build，載入 `dist/`，fixtures 在 `tests/` |
 | `npm run test:serve` | 本機模擬站（`tests/helpers/serve_mock_sites.mjs`） |
-| 需瀏覽器 | 下載攔截、歸因／外連追蹤、詢問彈窗 |
+| 純邏輯 | `matcher`、`classifier`、`unclassified`、`filename` 等已單元測試 |
+| 需瀏覽器 | 下載攔截、歸因／外連追蹤、content script、詢問彈窗 |
 
 ## 2. 設計原則
 
 - **分類 ≠ 歸因**。確認歸因或儲存規則**不搬移**已下載檔（對照 [#6](https://github.com/william563214/download_classify/issues/6) 可選搬檔）。
 - 測試順序：純函式 → service worker 訊息／storage → e2e。
-- 模擬站用**固定本機網域**（`fantia.test` / `fanbox.test` / `mega.test` / `forum.test` → `127.0.0.1`），不依賴真實站。
+- 模擬站用**固定本機網域**（`fantia.test` / `fanbox.test` / `mega.test` / `forum.test` → `127.0.0.1`），不依賴真實站、不上傳。
 - e2e 使用乾淨 profile／臨時 `user-data-dir`，避免污染本機擴充設定。
 
 ## 3. 測試金字塔
@@ -80,15 +87,21 @@
 
 ```
 tests/
-  unit/
+  unit/          # L1（可擴充含 L2）
+  integration/   # 建議後續：L2 chrome mock（尚未必備）
   e2e/
-  fixtures/    # fantia / fanbox / mega / forum 模擬站
-  helpers/     # extension 啟動、mock server
+  fixtures/      # fantia / fanbox / mega / forum（版控；勿唯獨依賴 .temp/）
+  helpers/       # extension 啟動、mock server
 ```
+
+| 路徑 | 用途 |
+|---|---|
+| `tests/` | **正式**測試與 fixtures（進版控） |
+| `.temp/` | **本機 scratch only**（gitignore；除錯／實驗輸出；非雲端、非 CI 依賴） |
 
 | script | 用途 |
 |---|---|
-| `test:unit` | Vitest L1 |
+| `test:unit` | Vitest L1（日後可含 L2） |
 | `test:e2e` | `scripts/run-e2e.sh`：先 build，再 Playwright 載入 `dist` |
 | `test:serve` | 本機固定網域模擬站（預設埠 `18765`） |
 | `install:edge` | build 後提示於 Edge 手動載入 `dist/` |
@@ -137,5 +150,6 @@ Chrome 啟動參數會把下列主機指到 `127.0.0.1`：
 
 - [x] `npm run typecheck` 與 `npm run build` 通過
 - [x] `npm run test:unit` 覆蓋 matcher／classifier／unclassified／filename／優先序等核心
-- [x] `npm run test:e2e` 至少覆蓋 **E1–E4**（腳本與 fixtures 已進版控）
-- [x] fixtures／腳本不**唯獨**依賴被 gitignore 的 `.temp/`
+- [x] `npm run test:e2e` 至少覆蓋 **E1–E4**（含 E3／E4 **不搬檔硬斷言**；腳本與 fixtures 已進版控）
+- [x] fixtures／腳本不**唯獨**依賴被 gitignore 的 `.temp/`（正式路徑為 `tests/`）
+- [x] 文件明示：**資料僅本機／不上傳**；`.temp/` 僅本機 scratch
