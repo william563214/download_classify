@@ -4,5 +4,205 @@
   },
   "extensionDescription": {
     "message": "Track download sources and classify files into target folders"
-  }
+  },
+
+  "categoryDocuments": { "message": "Documents" },
+  "categoryArchives": { "message": "Archives" },
+  "categoryImages": { "message": "Images" },
+  "categoryVideo": { "message": "Video" },
+  "categoryAudio": { "message": "Audio" },
+  "categoryOthers": { "message": "Other" },
+  "categoryNew": { "message": "New category" },
+  "ruleNameDownloadFromSite": {
+    "message": "Download from $1$",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+
+  "matchRoleSource": { "message": "Source site" },
+  "matchRoleDownload": { "message": "Download site" },
+  "matchRoleEither": { "message": "Source or download site" },
+
+  "errorHostRequired": { "message": "Please enter a domain" },
+  "errorFolderRequired": { "message": "Please enter a target folder" },
+  "errorNoAttributionCandidates": { "message": "No attribution candidates available" },
+  "errorDownloadNotFound": { "message": "Download record not found" },
+  "errorMatchersRequired": { "message": "Select at least one match condition" },
+  "errorSaveFailed": { "message": "Save failed" },
+  "errorConfirmFailed": { "message": "Confirm failed" },
+
+  "attrCandidateReferrer": {
+    "message": "Download page ($1$)",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "attrCandidateDownloadOnly": {
+    "message": "Download site only ($1$)",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "attrCandidateLinkClick": {
+    "message": "Link from $1$",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "attrCandidateOpenerTab": {
+    "message": "From $1$ (tab source)",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+
+  "popupPageTitle": { "message": "Download Classify" },
+  "popupHeading": { "message": "Download Classify" },
+  "popupOpenSettings": { "message": "Settings" },
+  "popupCurrentSite": { "message": "Current site" },
+  "popupLoading": { "message": "Loading..." },
+  "popupDisplayName": { "message": "Display name" },
+  "popupTargetFolder": { "message": "Target folder" },
+  "popupFolderPlaceholder": { "message": "e.g. Social/Threads" },
+  "popupMatchTarget": { "message": "Match against" },
+  "popupMatchTargetSource": { "message": "Source site (downloads from this page)" },
+  "popupMatchTargetDownload": { "message": "Download site" },
+  "popupMatchTargetEither": { "message": "Source or download site" },
+  "popupSaveSiteRule": { "message": "Save site classification" },
+  "popupUnclassifiedSection": { "message": "Unclassified downloads" },
+  "popupTodayStats": { "message": "Today's categories" },
+  "popupRecentDownloads": { "message": "Recent downloads" },
+  "popupUnsupportedPage": { "message": "Cannot analyze this page" },
+  "popupHttpsOnly": { "message": "Only http/https pages are supported" },
+  "popupKindSite": { "message": "Site classification" },
+  "popupKindCustom": { "message": "Custom rule" },
+  "popupConfigured": { "message": "Configured" },
+  "popupCurrentRules": { "message": "Current rules" },
+  "popupNotConfigured": { "message": "Not set" },
+  "popupFallbackFolder": {
+    "message": "Downloads will go to $1$",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "popupAttrTitle": { "message": "Attribution" },
+  "popupLinkTrace": { "message": "Click tracking" },
+  "popupLinkTraceHint": { "message": "Outbound clicks are cached and can be chosen as source A after downloads on inquiry sites" },
+  "popupAttrInquiry": { "message": "Attribution inquiry" },
+  "popupAttrInquiryHint": { "message": "Downloads from this site will ask for source attribution" },
+  "popupFileHost": { "message": "File host" },
+  "popupFileHostHint": { "message": "Listed as a known download host that source sites can attribute to" },
+  "popupCurrentPageAttr": { "message": "Current-page attribution" },
+  "popupCurrentPageAttrHint": { "message": "Downloads from this page use the current site as source" },
+  "popupSaved": { "message": "Saved" },
+  "popupConfidenceHigh": { "message": "High" },
+  "popupConfidenceMedium": { "message": "Medium" },
+  "popupConfidenceLow": { "message": "Low" },
+  "popupNoStatsToday": { "message": "No downloads today" },
+  "popupSourceLabel": {
+    "message": "Source $1$",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "popupSetRule": { "message": "Set rule" },
+  "popupNoRecent": { "message": "No downloads yet" },
+  "popupImported": { "message": "Imported" },
+  "popupUnclassifiedBadge": { "message": "Unclassified" },
+
+  "optionsPageTitle": { "message": "Download Classify settings" },
+  "optionsHeading": { "message": "Download Classify settings" },
+  "optionsSubtitle": { "message": "Manage classification rules, filename settings, and history import" },
+  "optionsUnclassifiedSection": { "message": "Unclassified prompt" },
+  "optionsUnclassifiedEnable": { "message": "Show a prompt after download when no site classification or domain-based custom rule matched" },
+  "optionsUnclassifiedHint": { "message": "Unclassified means no site classification or domain-based custom rule matched. Extension-only matches still prompt" },
+  "optionsRenameSection": { "message": "Filename settings" },
+  "optionsRenameEnable": { "message": "Add source domain to filename" },
+  "optionsDomainPosition": { "message": "Domain position" },
+  "optionsDomainPrefix": { "message": "Prefix" },
+  "optionsDomainSuffix": { "message": "Suffix" },
+  "optionsSeparator": { "message": "Separator" },
+  "optionsAttributionSection": { "message": "Attribution settings" },
+  "optionsPendingTtl": { "message": "Pending attribution TTL (minutes)" },
+  "optionsPendingTtlHint": { "message": "TTL also controls outbound-click cache and attribution candidate expiry" },
+  "optionsKnownHosts": { "message": "Known file-host domains (one per line; content script tracks outbound and same-site file links)" },
+  "optionsInquiryEnable": { "message": "Show attribution options on the prompt page for listed sites (does not affect classification prompts elsewhere)" },
+  "optionsInquirySites": { "message": "Attribution inquiry sites (one per line, e.g. mega.nz)" },
+  "optionsInquiryHint": { "message": "A→B attribution is applied only when you choose it on the prompt page; normal downloads use the current page. Classification prompts apply to all sites" },
+  "optionsSiteRulesSection": { "message": "Site classification" },
+  "optionsSiteRulesHint": { "message": "Route downloads by domain into a folder. Subdomains match (e.g. fantia.jp matches www.fantia.jp)" },
+  "optionsAddSiteRule": { "message": "Add site classification" },
+  "optionsCustomRulesSection": { "message": "Custom classification rules" },
+  "optionsCustomRulesHint": { "message": "Advanced rules combining filename, extension, source page, and more. Conditions within a rule are OR" },
+  "optionsAddRule": { "message": "Add rule" },
+  "optionsExtensionRulesSection": { "message": "Extension mapping" },
+  "optionsAddExtensionRule": { "message": "Add extension rule" },
+  "optionsHistorySection": { "message": "History import" },
+  "optionsHistoryDesc": { "message": "Import existing browser download history (index only; does not move files)" },
+  "optionsImportHistory": { "message": "Import download history" },
+  "optionsForceImportHistory": { "message": "Force re-import" },
+  "optionsExportImportSection": { "message": "Export and import rules" },
+  "optionsExportRules": { "message": "Export rules JSON" },
+  "optionsImportRules": { "message": "Import rules JSON" },
+  "optionsSaveSettings": { "message": "Save settings" },
+  "optionsSaved": { "message": "Saved" },
+  "optionsImportStats": {
+    "message": "Imported $1$, skipped $2$, total $3$",
+    "placeholders": {
+      "1": { "content": "$1" },
+      "2": { "content": "$2" },
+      "3": { "content": "$3" }
+    }
+  },
+  "optionsLabelDisplayName": { "message": "Display name" },
+  "optionsLabelHost": { "message": "Domain" },
+  "optionsHostPlaceholder": { "message": "e.g. fantia.jp or *.google.com" },
+  "optionsLabelMatchTarget": { "message": "Match against" },
+  "optionsLabelTargetFolder": { "message": "Target folder" },
+  "optionsLabelPriority": { "message": "Priority" },
+  "optionsLabelEnabled": { "message": "Enabled" },
+  "optionsDelete": { "message": "Delete" },
+  "optionsLabelName": { "message": "Name" },
+  "optionsLabelSourceSites": { "message": "Source domains (one pattern per line)" },
+  "optionsLabelSourcePages": { "message": "Source page patterns" },
+  "optionsLabelDownloadSites": { "message": "Download site patterns" },
+  "optionsLabelFilenames": { "message": "Filename patterns" },
+  "optionsLabelExtensions": { "message": "Extensions (comma-separated)" },
+  "optionsLabelType": { "message": "Type" },
+  "optionsLabelExtension": { "message": "Extension" },
+  "optionsDefaultSiteName": { "message": "New site" },
+  "optionsDefaultRuleName": { "message": "New rule" },
+  "optionsDefaultExtName": { "message": "New type" },
+
+  "classifyPageTitle": { "message": "Classify download" },
+  "classifyTitleDefault": { "message": "Classify download" },
+  "classifySubtitleDefault": { "message": "Create a classification rule for this download; similar files will be classified automatically" },
+  "classifyTitleBoth": { "message": "Classify and attribute" },
+  "classifySubtitleBoth": { "message": "Choose the real source first, then optionally create a classification rule" },
+  "classifyTitleAttribution": { "message": "Attribution inquiry" },
+  "classifySubtitleAttribution": { "message": "This download is from an inquiry site; choose the real source" },
+  "classifyDownloadInfo": { "message": "Download info" },
+  "classifyFilename": { "message": "Filename" },
+  "classifyCurrentCategory": { "message": "Current category" },
+  "classifyDownloadSite": { "message": "Download site" },
+  "classifySelectAttribution": { "message": "Choose source attribution" },
+  "classifyAttributionNote": { "message": "A→B attribution applies only on this prompt page and does not move the downloaded file; normal downloads use the current page" },
+  "classifyCreateRule": { "message": "Create rule (optional)" },
+  "classifyRuleName": { "message": "Category name" },
+  "classifyTargetFolder": { "message": "Target folder" },
+  "classifyFolderPlaceholder": { "message": "e.g. Work/Docs" },
+  "classifyPriority": { "message": "Priority (lower numbers win)" },
+  "classifyMatchers": { "message": "Match conditions" },
+  "classifyMatchSourceSite": { "message": "Source site:" },
+  "classifyMatchDownloadSite": { "message": "Download site:" },
+  "classifyMatchExtension": { "message": "Extension:" },
+  "classifyMatchFilename": { "message": "Full filename:" },
+  "classifyRuleNote": { "message": "The rule applies to future downloads; the current file is not moved" },
+  "classifyConfirmAttribution": { "message": "Confirm attribution" },
+  "classifySaveRule": { "message": "Save rule" },
+  "classifySkip": { "message": "Skip" },
+  "classifyLoading": { "message": "Loading..." },
+  "classifyNotFound": { "message": "Download record not found" },
+  "classifyAttributionConfirmed": { "message": "Attribution confirmed. You can create a classification rule or close this window" }
 }

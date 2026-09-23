@@ -1,4 +1,5 @@
 import { extract_hostname, urls_related } from "../shared/matcher";
+import { t } from "../shared/i18n";
 import type { AttributionCandidate } from "../shared/attribution-candidate";
 import type { PendingAttribution, TabSourceInfo } from "../shared/types";
 import { download_matches_page_context } from "./attribution";
@@ -40,7 +41,7 @@ export function build_attribution_candidates(
       page_title: "",
       method: "referrer",
       confidence: "medium",
-      label: `下載頁面（${referrer_site}）`,
+      label: t("attrCandidateReferrer", referrer_site),
     });
   }
 
@@ -50,7 +51,7 @@ export function build_attribution_candidates(
     page_title: "",
     method: "download_url_fallback",
     confidence: "low",
-    label: `僅以下載站（${download_site}）`,
+    label: t("attrCandidateDownloadOnly", download_site),
   });
 
   for (const item of pending) {
@@ -69,7 +70,7 @@ export function build_attribution_candidates(
       page_title: item.from_page_title,
       method: "link_click",
       confidence: "high",
-      label: `來自 ${item.from_site} 的連結`,
+      label: t("attrCandidateLinkClick", item.from_site),
     });
   }
 
@@ -97,7 +98,7 @@ export function build_attribution_candidates(
       page_title: source.source_page_title,
       method: "opener_tab",
       confidence: "high",
-      label: `來自 ${source.source_site}（分頁來源）`,
+      label: t("attrCandidateOpenerTab", source.source_site),
     });
   }
 

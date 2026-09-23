@@ -1,4 +1,5 @@
-import { default_extension_rules, default_rename } from "../shared/constants";
+import { default_rename } from "../shared/constants";
+import { t } from "../shared/i18n";
 import { build_classified_path } from "../shared/filename";
 import { extract_basename } from "../shared/matcher";
 import {
@@ -24,7 +25,7 @@ const pending_classifications = new Map<number, PendingClassification>();
 
 let memory_rules: ClassificationRule[] = [];
 let memory_site_rules: SiteClassificationRule[] = [];
-let memory_extension_rules: ExtensionRule[] = [...default_extension_rules];
+let memory_extension_rules: ExtensionRule[] = [];
 let memory_rename: RenameOptions = { ...default_rename };
 
 export function get_pending_classification(download_id: number): PendingClassification | undefined {
@@ -65,7 +66,7 @@ function build_record_from_item(
     ...context,
     filename: extract_basename(item.filename),
     original_filename: original_basename,
-    category: classification?.category ?? existing?.category ?? "其他",
+    category: classification?.category ?? existing?.category ?? t("categoryOthers"),
     target_folder: classification?.target_folder ?? existing?.target_folder ?? "Others",
     matched_rule_id: classification?.matched_rule_id ?? existing?.matched_rule_id ?? null,
     is_unclassified: classification

@@ -1,4 +1,5 @@
 import { host_matches_site } from "../shared/matcher";
+import { t } from "../shared/i18n";
 import { get_site_rules, save_site_rules } from "../shared/storage";
 import type { SaveSiteClassificationPayload, SiteClassificationRule } from "../shared/types";
 import { init_download_cache } from "./download-handler";
@@ -30,10 +31,10 @@ export async function upsert_site_classification(
   const name = payload.name.trim();
 
   if (!host) {
-    return { ok: false, error: "請填寫網域" };
+    return { ok: false, error: t("errorHostRequired") };
   }
   if (!target_folder) {
-    return { ok: false, error: "請填寫目標資料夾" };
+    return { ok: false, error: t("errorFolderRequired") };
   }
 
   const rules = await get_site_rules();

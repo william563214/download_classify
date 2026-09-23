@@ -1,4 +1,5 @@
 import { extract_extension } from "../shared/matcher";
+import { apply_document_i18n, t } from "../shared/i18n";
 import { suggest_rule_defaults } from "../shared/rule-builder";
 import type { AttributionCandidate } from "../shared/attribution-candidate";
 import type { DownloadRecord } from "../shared/types";
@@ -16,19 +17,19 @@ function update_page_heading(): void {
   }
 
   if (has_attribution_inquiry && needs_classification) {
-    title.textContent = "下載分類與來源歸因";
-    subtitle.textContent = "請先選擇實際來源，再建立分類規則（可選）";
+    title.textContent = t("classifyTitleBoth");
+    subtitle.textContent = t("classifySubtitleBoth");
     return;
   }
 
   if (has_attribution_inquiry) {
-    title.textContent = "來源歸因詢問";
-    subtitle.textContent = "此下載來自已設定詢問的網站，請選擇實際來源";
+    title.textContent = t("classifyTitleAttribution");
+    subtitle.textContent = t("classifySubtitleAttribution");
     return;
   }
 
-  title.textContent = "下載分類";
-  subtitle.textContent = "為此下載建立分類規則，之後同類檔案會自動歸類";
+  title.textContent = t("classifyTitleDefault");
+  subtitle.textContent = t("classifySubtitleDefault");
 }
 
 function get_download_id_from_url(): number {
@@ -188,8 +189,7 @@ function show_attribution_confirmed_note(): void {
   if (!section) {
     return;
   }
-  section.innerHTML =
-    '<p class="note">來源歸因已確認，可繼續建立分類規則或關閉視窗</p>';
+  section.innerHTML = `<p class="note">${escape_html(t("classifyAttributionConfirmed"))}</p>`;
   section.classList.remove("hidden");
 }
 
@@ -202,6 +202,7 @@ function escape_html(value: string): string {
 }
 
 async function load_page(): Promise<void> {
+  apply_document_i18n();
   current_download_id = get_download_id_from_url();
   if (!current_download_id) {
     document.getElementById("loading")?.classList.add("hidden");
@@ -258,7 +259,7 @@ async function save_rule(): Promise<void> {
   })) as { ok: boolean; error?: string };
 
   if (!result.ok) {
-    show_error(result.error ?? "儲存失敗");
+    show_error(result.error ?? t("errorSaveFailed"));
     return;
   }
 
@@ -275,7 +276,7 @@ async function confirm_attribution(): Promise<void> {
   })) as { ok: boolean; error?: string; keep_open?: boolean };
 
   if (!result.ok) {
-    show_error(result.error ?? "確認失敗");
+    show_error(result.error ?? t("errorConfirmFailed"));
     return;
   }
 

@@ -4,5 +4,205 @@
   },
   "extensionDescription": {
     "message": "自動追蹤下載來源並依規則分類到目標資料夾"
-  }
+  },
+
+  "categoryDocuments": { "message": "文件" },
+  "categoryArchives": { "message": "壓縮檔" },
+  "categoryImages": { "message": "圖片" },
+  "categoryVideo": { "message": "影片" },
+  "categoryAudio": { "message": "音訊" },
+  "categoryOthers": { "message": "其他" },
+  "categoryNew": { "message": "新分類" },
+  "ruleNameDownloadFromSite": {
+    "message": "$1$ 下載",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+
+  "matchRoleSource": { "message": "來源網站" },
+  "matchRoleDownload": { "message": "下載網站" },
+  "matchRoleEither": { "message": "來源或下載網站" },
+
+  "errorHostRequired": { "message": "請填寫網域" },
+  "errorFolderRequired": { "message": "請填寫目標資料夾" },
+  "errorNoAttributionCandidates": { "message": "沒有可選的歸因項目" },
+  "errorDownloadNotFound": { "message": "找不到下載紀錄" },
+  "errorMatchersRequired": { "message": "請至少選擇一項匹配條件" },
+  "errorSaveFailed": { "message": "儲存失敗" },
+  "errorConfirmFailed": { "message": "確認失敗" },
+
+  "attrCandidateReferrer": {
+    "message": "下載頁面（$1$）",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "attrCandidateDownloadOnly": {
+    "message": "僅以下載站（$1$）",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "attrCandidateLinkClick": {
+    "message": "來自 $1$ 的連結",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "attrCandidateOpenerTab": {
+    "message": "來自 $1$（分頁來源）",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+
+  "popupPageTitle": { "message": "下載分類助手" },
+  "popupHeading": { "message": "下載分類助手" },
+  "popupOpenSettings": { "message": "設定" },
+  "popupCurrentSite": { "message": "當前網站" },
+  "popupLoading": { "message": "載入中..." },
+  "popupDisplayName": { "message": "顯示名稱" },
+  "popupTargetFolder": { "message": "目標資料夾" },
+  "popupFolderPlaceholder": { "message": "例如 Social/Threads" },
+  "popupMatchTarget": { "message": "匹配方式" },
+  "popupMatchTargetSource": { "message": "來源網站（從此頁下載）" },
+  "popupMatchTargetDownload": { "message": "下載網站" },
+  "popupMatchTargetEither": { "message": "來源或下載網站" },
+  "popupSaveSiteRule": { "message": "儲存網站分類" },
+  "popupUnclassifiedSection": { "message": "待分類下載" },
+  "popupTodayStats": { "message": "今日分類" },
+  "popupRecentDownloads": { "message": "最近下載" },
+  "popupUnsupportedPage": { "message": "無法分析此頁面" },
+  "popupHttpsOnly": { "message": "僅支援 http/https 網頁" },
+  "popupKindSite": { "message": "網站分類" },
+  "popupKindCustom": { "message": "自定義規則" },
+  "popupConfigured": { "message": "已設定" },
+  "popupCurrentRules": { "message": "目前規則" },
+  "popupNotConfigured": { "message": "未設定" },
+  "popupFallbackFolder": {
+    "message": "下載將暫存至 $1$",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "popupAttrTitle": { "message": "歸因" },
+  "popupLinkTrace": { "message": "點擊追蹤" },
+  "popupLinkTraceHint": { "message": "外連點擊會暫存，僅在歸因詢問站下載後可選為 A 站來源" },
+  "popupAttrInquiry": { "message": "歸因詢問" },
+  "popupAttrInquiryHint": { "message": "在此站下載完成後會詢問來源歸因" },
+  "popupFileHost": { "message": "網盤站" },
+  "popupFileHostHint": { "message": "列為已知下載站，可被來源站追溯" },
+  "popupCurrentPageAttr": { "message": "當前頁歸因" },
+  "popupCurrentPageAttrHint": { "message": "從此頁下載以當前網站為來源" },
+  "popupSaved": { "message": "已儲存" },
+  "popupConfidenceHigh": { "message": "高" },
+  "popupConfidenceMedium": { "message": "中" },
+  "popupConfidenceLow": { "message": "低" },
+  "popupNoStatsToday": { "message": "今日尚無下載紀錄" },
+  "popupSourceLabel": {
+    "message": "來源 $1$",
+    "placeholders": {
+      "1": { "content": "$1" }
+    }
+  },
+  "popupSetRule": { "message": "設定規則" },
+  "popupNoRecent": { "message": "尚無下載紀錄" },
+  "popupImported": { "message": "歷史匯入" },
+  "popupUnclassifiedBadge": { "message": "未分類" },
+
+  "optionsPageTitle": { "message": "下載分類助手設定" },
+  "optionsHeading": { "message": "下載分類助手設定" },
+  "optionsSubtitle": { "message": "管理分類規則、檔名設定與歷史匯入" },
+  "optionsUnclassifiedSection": { "message": "未分類提示" },
+  "optionsUnclassifiedEnable": { "message": "未命中網站分類或含網域條件的自定義規則時，下載完成後彈窗提示" },
+  "optionsUnclassifiedHint": { "message": "未分類指未命中網站分類或含網域條件的自定義規則。僅副檔名規則仍會詢問" },
+  "optionsRenameSection": { "message": "檔名設定" },
+  "optionsRenameEnable": { "message": "在檔名加上來源網域" },
+  "optionsDomainPosition": { "message": "網域位置" },
+  "optionsDomainPrefix": { "message": "前綴" },
+  "optionsDomainSuffix": { "message": "後綴" },
+  "optionsSeparator": { "message": "分隔符" },
+  "optionsAttributionSection": { "message": "歸因設定" },
+  "optionsPendingTtl": { "message": "待歸因有效時間（分鐘）" },
+  "optionsPendingTtlHint": { "message": "待歸因有效時間同時控制外連點擊暫存與歸因候選的有效期限" },
+  "optionsKnownHosts": { "message": "已知網盤網域（每行一個，Content Script 追蹤外連與同站網盤連結）" },
+  "optionsInquiryEnable": { "message": "在指定網站下載時，詢問頁顯示歸因選項（不影響其他網站的分類詢問）" },
+  "optionsInquirySites": { "message": "歸因詢問網站（每行一個，例如 mega.nz）" },
+  "optionsInquiryHint": { "message": "A→B 歸因追溯僅在詢問頁由你選擇後套用，平常下載以當前頁面為準。未分類的分類詢問適用所有網站" },
+  "optionsSiteRulesSection": { "message": "網站分類" },
+  "optionsSiteRulesHint": { "message": "依網域將下載自動分到指定資料夾。支援子網域（例如 fantia.jp 會匹配 www.fantia.jp）" },
+  "optionsAddSiteRule": { "message": "新增網站分類" },
+  "optionsCustomRulesSection": { "message": "自定義分類規則" },
+  "optionsCustomRulesHint": { "message": "進階規則，可組合檔名、副檔名、來源頁面等。同一規則內多個條件為 OR 任一命中即匹配" },
+  "optionsAddRule": { "message": "新增規則" },
+  "optionsExtensionRulesSection": { "message": "副檔名對照表" },
+  "optionsAddExtensionRule": { "message": "新增副檔名規則" },
+  "optionsHistorySection": { "message": "歷史匯入" },
+  "optionsHistoryDesc": { "message": "匯入瀏覽器既有下載紀錄（僅建立索引，不會搬移既有檔案）" },
+  "optionsImportHistory": { "message": "匯入下載歷史" },
+  "optionsForceImportHistory": { "message": "強制重新匯入" },
+  "optionsExportImportSection": { "message": "規則匯出與匯入" },
+  "optionsExportRules": { "message": "匯出規則 JSON" },
+  "optionsImportRules": { "message": "匯入規則 JSON" },
+  "optionsSaveSettings": { "message": "儲存設定" },
+  "optionsSaved": { "message": "已儲存" },
+  "optionsImportStats": {
+    "message": "匯入 $1$ 筆，略過 $2$ 筆，共 $3$ 筆",
+    "placeholders": {
+      "1": { "content": "$1" },
+      "2": { "content": "$2" },
+      "3": { "content": "$3" }
+    }
+  },
+  "optionsLabelDisplayName": { "message": "顯示名稱" },
+  "optionsLabelHost": { "message": "網域" },
+  "optionsHostPlaceholder": { "message": "例如 fantia.jp 或 *.google.com" },
+  "optionsLabelMatchTarget": { "message": "匹配方式" },
+  "optionsLabelTargetFolder": { "message": "目標資料夾" },
+  "optionsLabelPriority": { "message": "優先級" },
+  "optionsLabelEnabled": { "message": "啟用" },
+  "optionsDelete": { "message": "刪除" },
+  "optionsLabelName": { "message": "名稱" },
+  "optionsLabelSourceSites": { "message": "來源網域（每行一個 pattern）" },
+  "optionsLabelSourcePages": { "message": "來源頁面 pattern" },
+  "optionsLabelDownloadSites": { "message": "下載站 pattern" },
+  "optionsLabelFilenames": { "message": "檔名 pattern" },
+  "optionsLabelExtensions": { "message": "副檔名（逗號分隔）" },
+  "optionsLabelType": { "message": "類型" },
+  "optionsLabelExtension": { "message": "副檔名" },
+  "optionsDefaultSiteName": { "message": "新網站" },
+  "optionsDefaultRuleName": { "message": "新規則" },
+  "optionsDefaultExtName": { "message": "新類型" },
+
+  "classifyPageTitle": { "message": "下載分類" },
+  "classifyTitleDefault": { "message": "下載分類" },
+  "classifySubtitleDefault": { "message": "為此下載建立分類規則，之後同類檔案會自動歸類" },
+  "classifyTitleBoth": { "message": "下載分類與來源歸因" },
+  "classifySubtitleBoth": { "message": "請先選擇實際來源，再建立分類規則（可選）" },
+  "classifyTitleAttribution": { "message": "來源歸因詢問" },
+  "classifySubtitleAttribution": { "message": "此下載來自已設定詢問的網站，請選擇實際來源" },
+  "classifyDownloadInfo": { "message": "下載資訊" },
+  "classifyFilename": { "message": "檔名" },
+  "classifyCurrentCategory": { "message": "目前分類" },
+  "classifyDownloadSite": { "message": "下載網站" },
+  "classifySelectAttribution": { "message": "選擇來源歸因" },
+  "classifyAttributionNote": { "message": "A→B 歸因僅在此詢問頁套用，不會搬移已下載檔案，平常下載以當前頁面為準" },
+  "classifyCreateRule": { "message": "建立規則（可選）" },
+  "classifyRuleName": { "message": "分類名稱" },
+  "classifyTargetFolder": { "message": "目標資料夾" },
+  "classifyFolderPlaceholder": { "message": "例如 Work/Docs" },
+  "classifyPriority": { "message": "優先級（數字越小越優先）" },
+  "classifyMatchers": { "message": "匹配條件" },
+  "classifyMatchSourceSite": { "message": "來源網站：" },
+  "classifyMatchDownloadSite": { "message": "下載網站：" },
+  "classifyMatchExtension": { "message": "副檔名：" },
+  "classifyMatchFilename": { "message": "完整檔名：" },
+  "classifyRuleNote": { "message": "規則會套用於之後的下載，目前檔案位置不會自動搬移" },
+  "classifyConfirmAttribution": { "message": "確認歸因" },
+  "classifySaveRule": { "message": "儲存規則" },
+  "classifySkip": { "message": "略過" },
+  "classifyLoading": { "message": "載入中..." },
+  "classifyNotFound": { "message": "找不到下載紀錄" },
+  "classifyAttributionConfirmed": { "message": "來源歸因已確認，可繼續建立分類規則或關閉視窗" }
 }

@@ -1,7 +1,7 @@
 import {
   db_name,
   db_version,
-  default_extension_rules,
+  get_default_extension_rules,
   default_settings,
   records_store,
   storage_keys,
@@ -79,7 +79,7 @@ export async function init_storage(): Promise<void> {
 
   const extension_rules = await get_local<ExtensionRule[]>(storage_keys.extension_rules);
   if (!extension_rules) {
-    await set_local(storage_keys.extension_rules, default_extension_rules);
+    await set_local(storage_keys.extension_rules, get_default_extension_rules());
   }
 
   const site_rules = await get_local<SiteClassificationRule[]>(storage_keys.site_rules);
@@ -132,7 +132,7 @@ export async function save_site_rules(rules: SiteClassificationRule[]): Promise<
 
 export async function get_extension_rules(): Promise<ExtensionRule[]> {
   const rules = await get_local<ExtensionRule[]>(storage_keys.extension_rules);
-  return rules ?? default_extension_rules;
+  return rules ?? get_default_extension_rules();
 }
 
 export async function save_extension_rules(rules: ExtensionRule[]): Promise<void> {

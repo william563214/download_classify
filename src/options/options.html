@@ -3,104 +3,104 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>下載分類助手設定</title>
+    <title data-i18n="optionsPageTitle">下載分類助手設定</title>
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
     <header>
-      <h1>下載分類助手設定</h1>
-      <p>管理分類規則、檔名設定與歷史匯入</p>
+      <h1 data-i18n="optionsHeading">下載分類助手設定</h1>
+      <p data-i18n="optionsSubtitle">管理分類規則、檔名設定與歷史匯入</p>
     </header>
 
     <section>
-      <h2>未分類提示</h2>
+      <h2 data-i18n="optionsUnclassifiedSection">未分類提示</h2>
       <label class="row">
         <input type="checkbox" id="unclassified-prompt-enabled" />
-        未命中網站分類或含網域條件的自定義規則時，下載完成後彈窗提示
+        <span data-i18n="optionsUnclassifiedEnable">未命中網站分類或含網域條件的自定義規則時，下載完成後彈窗提示</span>
       </label>
-      <p class="hint">未分類指未命中網站分類或含網域條件的自定義規則。僅副檔名規則仍會詢問</p>
+      <p class="hint" data-i18n="optionsUnclassifiedHint">未分類指未命中網站分類或含網域條件的自定義規則。僅副檔名規則仍會詢問</p>
     </section>
 
     <section>
-      <h2>檔名設定</h2>
+      <h2 data-i18n="optionsRenameSection">檔名設定</h2>
       <label class="row">
         <input type="checkbox" id="rename-enabled" />
-        在檔名加上來源網域
+        <span data-i18n="optionsRenameEnable">在檔名加上來源網域</span>
       </label>
       <label class="row">
-        網域位置
+        <span data-i18n="optionsDomainPosition">網域位置</span>
         <select id="domain-position">
-          <option value="prefix">前綴</option>
-          <option value="suffix">後綴</option>
+          <option value="prefix" data-i18n="optionsDomainPrefix">前綴</option>
+          <option value="suffix" data-i18n="optionsDomainSuffix">後綴</option>
         </select>
       </label>
       <label class="row">
-        分隔符
+        <span data-i18n="optionsSeparator">分隔符</span>
         <input type="text" id="separator" maxlength="3" />
       </label>
     </section>
 
     <section>
-      <h2>歸因設定</h2>
+      <h2 data-i18n="optionsAttributionSection">歸因設定</h2>
       <label class="row">
-        待歸因有效時間（分鐘）
+        <span data-i18n="optionsPendingTtl">待歸因有效時間（分鐘）</span>
         <input type="number" id="pending-ttl" min="1" max="120" />
       </label>
-      <p class="hint">待歸因有效時間同時控制外連點擊暫存與歸因候選的有效期限</p>
+      <p class="hint" data-i18n="optionsPendingTtlHint">待歸因有效時間同時控制外連點擊暫存與歸因候選的有效期限</p>
       <label class="row column">
-        已知網盤網域（每行一個，Content Script 追蹤外連與同站網盤連結）
+        <span data-i18n="optionsKnownHosts">已知網盤網域（每行一個，Content Script 追蹤外連與同站網盤連結）</span>
         <textarea id="known-hosts" rows="6"></textarea>
       </label>
       <label class="row">
         <input type="checkbox" id="inquiry-enabled" />
-        在指定網站下載時，詢問頁顯示歸因選項（不影響其他網站的分類詢問）
+        <span data-i18n="optionsInquiryEnable">在指定網站下載時，詢問頁顯示歸因選項（不影響其他網站的分類詢問）</span>
       </label>
       <label class="row column">
-        歸因詢問網站（每行一個，例如 mega.nz）
+        <span data-i18n="optionsInquirySites">歸因詢問網站（每行一個，例如 mega.nz）</span>
         <textarea id="inquiry-sites" rows="5"></textarea>
       </label>
-      <p class="hint">A→B 歸因追溯僅在詢問頁由你選擇後套用，平常下載以當前頁面為準。未分類的分類詢問適用所有網站</p>
+      <p class="hint" data-i18n="optionsInquiryHint">A→B 歸因追溯僅在詢問頁由你選擇後套用，平常下載以當前頁面為準。未分類的分類詢問適用所有網站</p>
     </section>
 
     <section>
-      <h2>網站分類</h2>
-      <p class="hint">依網域將下載自動分到指定資料夾。支援子網域（例如 fantia.jp 會匹配 www.fantia.jp）</p>
+      <h2 data-i18n="optionsSiteRulesSection">網站分類</h2>
+      <p class="hint" data-i18n="optionsSiteRulesHint">依網域將下載自動分到指定資料夾。支援子網域（例如 fantia.jp 會匹配 www.fantia.jp）</p>
       <div id="site-rules-container"></div>
-      <button type="button" id="add-site-rule">新增網站分類</button>
+      <button type="button" id="add-site-rule" data-i18n="optionsAddSiteRule">新增網站分類</button>
     </section>
 
     <section>
-      <h2>自定義分類規則</h2>
-      <p class="hint">進階規則，可組合檔名、副檔名、來源頁面等。同一規則內多個條件為 OR 任一命中即匹配</p>
+      <h2 data-i18n="optionsCustomRulesSection">自定義分類規則</h2>
+      <p class="hint" data-i18n="optionsCustomRulesHint">進階規則，可組合檔名、副檔名、來源頁面等。同一規則內多個條件為 OR 任一命中即匹配</p>
       <div id="rules-container"></div>
-      <button type="button" id="add-rule">新增規則</button>
+      <button type="button" id="add-rule" data-i18n="optionsAddRule">新增規則</button>
     </section>
 
     <section>
-      <h2>副檔名對照表</h2>
+      <h2 data-i18n="optionsExtensionRulesSection">副檔名對照表</h2>
       <div id="extension-rules-container"></div>
-      <button type="button" id="add-extension-rule">新增副檔名規則</button>
+      <button type="button" id="add-extension-rule" data-i18n="optionsAddExtensionRule">新增副檔名規則</button>
     </section>
 
     <section>
-      <h2>歷史匯入</h2>
-      <p>匯入瀏覽器既有下載紀錄（僅建立索引，不會搬移既有檔案）</p>
-      <button type="button" id="import-history">匯入下載歷史</button>
-      <button type="button" id="force-import-history">強制重新匯入</button>
+      <h2 data-i18n="optionsHistorySection">歷史匯入</h2>
+      <p data-i18n="optionsHistoryDesc">匯入瀏覽器既有下載紀錄（僅建立索引，不會搬移既有檔案）</p>
+      <button type="button" id="import-history" data-i18n="optionsImportHistory">匯入下載歷史</button>
+      <button type="button" id="force-import-history" data-i18n="optionsForceImportHistory">強制重新匯入</button>
       <p id="import-status" class="status"></p>
     </section>
 
     <section>
-      <h2>規則匯出與匯入</h2>
-      <button type="button" id="export-rules">匯出規則 JSON</button>
+      <h2 data-i18n="optionsExportImportSection">規則匯出與匯入</h2>
+      <button type="button" id="export-rules" data-i18n="optionsExportRules">匯出規則 JSON</button>
       <label class="row">
-        匯入規則 JSON
+        <span data-i18n="optionsImportRules">匯入規則 JSON</span>
         <input type="file" id="import-rules-file" accept="application/json" />
       </label>
     </section>
 
     <footer>
-      <button type="button" id="save-settings" class="primary">儲存設定</button>
+      <button type="button" id="save-settings" class="primary" data-i18n="optionsSaveSettings">儲存設定</button>
       <span id="save-status" class="status"></span>
     </footer>
 

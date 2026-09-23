@@ -1,4 +1,5 @@
 import { host_matches_site, is_known_file_host, matches_any_pattern } from "./matcher";
+import { t } from "./i18n";
 import type {
   AppSettings,
   ClassificationRule,
@@ -49,12 +50,12 @@ function custom_rule_applies_to_host(
 
 function match_role_label(role: SiteRuleMatch["match_role"]): string {
   if (role === "source") {
-    return "來源網站";
+    return t("matchRoleSource");
   }
   if (role === "download") {
-    return "下載網站";
+    return t("matchRoleDownload");
   }
-  return "來源或下載網站";
+  return t("matchRoleEither");
 }
 
 export function format_match_role(role: SiteRuleMatch["match_role"]): string {

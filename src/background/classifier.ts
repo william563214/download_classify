@@ -1,4 +1,5 @@
 import { fallback_folder } from "../shared/constants";
+import { t } from "../shared/i18n";
 import {
   extract_basename,
   extract_extension,
@@ -122,7 +123,7 @@ function heuristic_fallback(input: ClassifyInput): ClassificationResult {
   }
 
   return {
-    category: "其他",
+    category: t("categoryOthers"),
     target_folder: fallback_folder,
     matched_rule_id: null,
   };
