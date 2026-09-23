@@ -2,6 +2,16 @@
 
 ## 套件打包
 
+產出檔案：**`store/download-classify.zip`**（由 `dist/` 打包）。
+
+```bash
+npm run pack
+# 等同：
+# npm run build && bash scripts/pack-store.sh
+```
+
+手動等價步驟：
+
 ```bash
 npm run build
 cd dist && zip -r ../store/download-classify.zip .
@@ -27,32 +37,40 @@ cd dist && zip -r ../store/download-classify.zip .
 
 圖示為自製「下載箭頭 + 資料夾／分類」標記，無第三方商標。
 
-重新產生 PNG（可選）：
+重新產生 PNG（可選；腳本在追蹤目錄 `scripts/`，**不**依賴 gitignored 的 `.temp/`）：
 
 ```bash
-uv run --with playwright python -m playwright install chromium
-uv run --with playwright python .temp/scripts/render_icons.py
+npx playwright install chromium
+python scripts/render_icons.py
+# 或：uv run --with playwright python scripts/render_icons.py
 ```
 
 ## 螢幕截圖
 
 路徑：`store/screenshots/`，尺寸 1280×800（Edge 建議常見規格）。
 
-| 檔案 | 內容 |
-|---|---|
-| `store/screenshots/01-popup-site-classify.png` | Popup 當前網站分類與快速設定 |
-| `store/screenshots/02-popup-recent-stats.png` | Popup 最近下載與今日統計 |
-| `store/screenshots/03-options-rules.png` | Options 網站分類與自定義規則 |
-| `store/screenshots/04-prompt-classify-attribution.png` | 詢問頁（分類 + 歸因） |
-| `store/screenshots/05-explorer-classified.png` | 下載後檔案已分類至子資料夾 |
+HTML mock 原稿：`store/screenshot-mocks/`。
 
-**來源說明**：本批截圖為依實際 UI 樣式製作的靜態 mock（非瀏覽器 live 擴充功能擷取），內容對應真實介面與本機隱私承諾，不含上傳／遙測。
+| 檔案 | 內容 | 來源 |
+|---|---|---|
+| `store/screenshots/01-popup-site-classify.png` | Popup 當前網站分類與快速設定 | UI-style mock |
+| `store/screenshots/02-popup-recent-stats.png` | Popup 最近下載與今日統計 | UI-style mock |
+| `store/screenshots/03-options-rules.png` | Options 網站分類與自定義規則 | UI-style mock |
+| `store/screenshots/04-prompt-classify-attribution.png` | 詢問頁（分類 + 歸因） | UI-style mock |
+| `store/screenshots/05-explorer-classified-mock.png` | 下載後檔案分類至子資料夾（檔案總管示意） | **illustrative mock（非 live 擷取）** |
+
+### 重要：截圖 05 為 illustrative mock
+
+`05-explorer-classified-mock.png` **不是**作業系統檔案總管的真實截圖。畫面內已加上「ILLUSTRATIVE MOCK」橫幅與說明文字，僅供商店上架示意分類結果路徑（例如 `Downloads/Creators/Fantia/`）。上架提交前請以此理解素材性質；若審核要求 live 擷取，請另補真實檔案總管畫面。
+
+其餘 01–04 亦為依實際擴充功能 UI 樣式製作的靜態 mock（非瀏覽器 live 擴充功能擷取）。隱私承諾不變：資料僅存本機，不含上傳／遙測。
 
 重新產生截圖（可選）：
 
 ```bash
-uv run --with playwright python -m playwright install chromium
-uv run --with playwright python .temp/scripts/capture_store_screenshots.py
+npx playwright install chromium
+python scripts/capture_store_screenshots.py
+# 或：uv run --with playwright python scripts/capture_store_screenshots.py
 ```
 
 ## 商店描述（繁體中文）
@@ -97,3 +115,4 @@ uv run --with playwright python .temp/scripts/capture_store_screenshots.py
 - `<all_urls>` 僅用於外連點擊追蹤，非資料收集
 - 強調資料僅存本機
 - A→B 歸因需使用者於詢問頁確認，非自動套用
+- 截圖 05 為 illustrative mock，非 live 檔案總管擷取（見上方說明）

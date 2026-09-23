@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>詢問頁 - 分類與歸因</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    .stage {
+      width: 1280px; height: 800px;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(ellipse at 20% 10%, #e8f3fc 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, #d6e8f8 0%, transparent 45%),
+        linear-gradient(160deg, #edf3f9 0%, #d8e4f0 100%);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      position: relative;
+    }
+    .caption {
+      position: absolute; left: 48px; bottom: 40px;
+      color: #3b4a5a; font-size: 18px; font-weight: 600;
+    }
+    .window {
+      width: 560px;
+      background: #f7f8fa; border-radius: 12px; padding: 14px;
+      box-shadow: 0 18px 50px rgba(15, 40, 70, 0.18);
+      border: 1px solid #c9d6e4; color: #1a1a1a; font-size: 13px;
+    }
+    header { margin-bottom: 12px; }
+    h1 { margin: 0 0 4px; font-size: 18px; }
+    h2 { margin: 0 0 10px; font-size: 14px; }
+    p { margin: 0; color: #555; }
+    .card {
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px;
+    }
+    dl { margin: 0; display: grid; grid-template-columns: 88px 1fr; gap: 6px 10px; }
+    dt { color: #666; }
+    dd { margin: 0; word-break: break-all; }
+    .note { font-size: 12px; color: #666; margin-bottom: 8px; }
+    .field { display: block; margin-bottom: 10px; }
+    .field input {
+      display: block; width: 100%; margin-top: 4px; padding: 6px 8px;
+      border: 1px solid #ccc; border-radius: 4px; font: inherit; background: #fff;
+    }
+    fieldset { border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; margin: 0 0 10px; }
+    legend { padding: 0 4px; }
+    .check { display: block; margin-bottom: 8px; }
+    .attribution-list { border: none; margin: 0; padding: 0; }
+    .attribution-option {
+      display: block; padding: 10px; margin-bottom: 8px;
+      border: 1px solid #e5e7eb; border-radius: 6px; background: #fff;
+    }
+    .attribution-option.selected { border-color: #0078d4; background: #f0f6fc; }
+    .attribution-option input { margin-right: 8px; }
+    .attribution-label { display: block; font-weight: 600; margin-bottom: 4px; }
+    .attribution-meta { display: block; font-size: 11px; color: #666; margin-left: 22px; word-break: break-all; }
+    footer { display: flex; gap: 8px; }
+    button {
+      padding: 8px 14px; border: 1px solid #ccc; border-radius: 4px;
+      background: #fff; font: inherit;
+    }
+    button.primary { background: #0078d4; border-color: #0078d4; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="window">
+      <header>
+        <h1>下載分類</h1>
+        <p>為此下載建立分類規則，之後同類檔案會自動歸類</p>
+      </header>
+      <section class="card">
+        <h2>下載資訊</h2>
+        <dl>
+          <dt>檔名</dt><dd>project-archive.zip</dd>
+          <dt>目前分類</dt><dd>Others/</dd>
+          <dt>下載網站</dt><dd>mega.nz</dd>
+        </dl>
+      </section>
+      <section class="card">
+        <h2>選擇來源歸因</h2>
+        <p class="note">A→B 歸因僅在此詢問頁套用，不會搬移已下載檔案，平常下載以當前頁面為準</p>
+        <fieldset class="attribution-list">
+          <label class="attribution-option selected">
+            <input type="radio" checked />
+            <span class="attribution-label">fantia.jp → mega.nz</span>
+            <span class="attribution-meta">外連點擊 · 2 分鐘前</span>
+          </label>
+          <label class="attribution-option">
+            <input type="radio" />
+            <span class="attribution-label">僅 mega.nz（不下寫 A→B）</span>
+            <span class="attribution-meta">下載站 fallback</span>
+          </label>
+        </fieldset>
+      </section>
+      <section class="card">
+        <h2>建立規則（可選）</h2>
+        <label class="field">分類名稱<input value="Fantia via MEGA" readonly /></label>
+        <label class="field">目標資料夾<input value="Creators/Fantia" readonly /></label>
+        <fieldset>
+          <legend>匹配條件</legend>
+          <label class="check"><input type="checkbox" checked /> 來源網站：fantia.jp</label>
+          <label class="check"><input type="checkbox" checked /> 下載網站：mega.nz</label>
+        </fieldset>
+        <p class="note">規則會套用於之後的下載，目前檔案位置不會自動搬移 · 資料僅存本機</p>
+      </section>
+      <footer>
+        <button type="button" class="primary">確認歸因</button>
+        <button type="button" class="primary">儲存規則</button>
+        <button type="button">略過</button>
+      </footer>
+    </div>
+    <div class="caption">詢問頁：分類 + 歸因</div>
+  </div>
+</body>
+</html>
