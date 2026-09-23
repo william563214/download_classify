@@ -1,6 +1,13 @@
 # 路線圖
 
-本文件是產品優先順序的單一來源，對應 [GitHub Issues](https://github.com/william563214/download_classify/issues)。分類與歸因分開處理；確認歸因／儲存規則不會搬移已下載檔；資料僅存本機。
+本文件是產品優先順序的單一來源，對應 [GitHub Issues](https://github.com/william563214/download_classify/issues)。
+
+## 硬性產品規則
+
+1. 分類與歸因分開處理。
+2. 確認歸因或儲存規則不會搬移已下載檔，只影響紀錄與之後的下載。
+3. 僅副檔名對照或啟發式命中仍算**未分類**（會觸發分類詢問）。
+4. 資料僅存本機；`chrome.storage.sync`（若實作）僅同步瀏覽器設定／規則，不是上傳或雲端同步使用者下載檔。
 
 ## P0 品質／可上架
 
@@ -32,7 +39,7 @@
 
 - 優先以 cloud-agent PR 推進各 issue
 - 未經 owner 核准勿合併
-- 隱私原則：資料僅存本機，不上傳外部
+- 隱私原則：資料僅存本機，不上傳外部；`storage.sync` ≠ 下載檔雲端同步
 
 ## 建議下一步
 
