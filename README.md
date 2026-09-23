@@ -117,14 +117,18 @@ Content Script 記錄：
 
 ## 開發
 
+測試計畫見 [`docs/TESTING.md`](docs/TESTING.md)。
+
 ```bash
 npm run dev          # 監聽建置
-npm run test:e2e     # Playwright 測試
-npm run test:serve   # 本機模擬站
-npm run install:edge # 安裝到 Edge
+npm run typecheck    # TypeScript 檢查
+npm run test:unit    # Vitest 單元測試
+npm run test:e2e     # Playwright e2e（先 build，載入 dist）
+npm run test:serve   # 本機模擬站（tests/fixtures）
+npm run install:edge # build 後提示於 Edge 載入 dist
 ```
 
-模擬站路徑見 `.temp/tests/fixtures/`（Fantia / FANBOX / MEGA 等）。
+模擬站與 e2e fixtures 位於 `tests/fixtures/`（Fantia / FANBOX / MEGA / Forum）。詳細步驟與已知限制見 `docs/TESTING.md`。
 
 ## 隱私
 
