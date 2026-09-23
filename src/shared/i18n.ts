@@ -1,6 +1,13 @@
 export function t(key: string, substitutions?: string | string[]): string {
-  const message = chrome.i18n.getMessage(key, substitutions);
-  return message || key;
+  try {
+    const message = chrome?.i18n?.getMessage?.(key, substitutions);
+    if (message) {
+      return message;
+    }
+  } catch {
+    // chrome.i18n unavailable outside extension runtime
+  }
+  return key;
 }
 
 export function apply_document_i18n(root: ParentNode = document): void {

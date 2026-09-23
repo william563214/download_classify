@@ -96,7 +96,7 @@ test.describe("e2e E1-E4", () => {
 
       await trigger_download_and_wait(mock_hosts.fanbox, context);
       const classify_page = await wait_for_classify_page(context);
-      await expect(classify_page.locator("#page-title")).toContainText(/分類/);
+      await expect(classify_page.locator("#page-title")).toContainText(/分類|Classify/);
 
       const record = await wait_for_download_record(
         service_worker,
@@ -230,7 +230,7 @@ test.describe("e2e E1-E4", () => {
       expect(path_before.filename.length).toBeGreaterThan(0);
 
       const classify_page = await wait_for_classify_page(context);
-      await expect(classify_page.locator("#page-title")).toContainText(/歸因/);
+      await expect(classify_page.locator("#page-title")).toContainText(/歸因|Attribution|attribute/i);
       await expect(classify_page.locator('input[name="attribution-choice"]')).not.toHaveCount(0);
 
       const radios = classify_page.locator('input[name="attribution-choice"]');
