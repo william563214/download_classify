@@ -2,6 +2,8 @@
 
 Microsoft Edge 擴充功能：攔截下載、依規則分類到子資料夾、追蹤來源，並在需要時詢問分類與歸因。
 
+產品優先順序見 [ROADMAP.md](./ROADMAP.md)。
+
 ## 快速開始
 
 ```bash
