@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>Popup - 當前網站分類</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #dbe7f3; }
+    .stage {
+      width: 1280px; height: 800px;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(ellipse at 20% 10%, #e8f3fc 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, #d6e8f8 0%, transparent 45%),
+        linear-gradient(160deg, #edf3f9 0%, #d8e4f0 100%);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      position: relative;
+    }
+    .caption {
+      position: absolute; left: 48px; bottom: 40px;
+      color: #3b4a5a; font-size: 18px; font-weight: 600;
+    }
+    .brand {
+      position: absolute; left: 48px; top: 40px;
+      display: flex; align-items: center; gap: 12px; color: #1a1a1a;
+    }
+    .brand img { width: 40px; height: 40px; object-fit: cover; border-radius: 10px; }
+    .brand span { font-size: 22px; font-weight: 700; }
+    .chrome {
+      width: 420px; background: #f7f8fa; border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(15, 40, 70, 0.18);
+      border: 1px solid #c9d6e4; overflow: hidden;
+    }
+    .popup { padding: 12px; width: 400px; margin: 0 auto; font-size: 13px; color: #1a1a1a; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    h1 { margin: 0; font-size: 16px; }
+    h2 { margin: 0 0 8px; font-size: 13px; color: #444; }
+    a { color: #0078d4; text-decoration: none; font-size: 12px; }
+    section { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+    #current-site-section { border-color: #c7e0f4; background: #f8fbfe; }
+    .site-host { font-weight: 600; margin-bottom: 8px; font-size: 12px; }
+    .site-status-title { font-size: 12px; font-weight: 600; color: #444; margin-bottom: 6px; }
+    .site-status-list { list-style: none; margin: 0; padding: 0; }
+    .site-status-list li { margin-bottom: 6px; font-size: 12px; line-height: 1.5; }
+    .status-badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+    .status-yes { background: #dff6dd; color: #107c10; }
+    .status-no { background: #f3f2f1; color: #605e5c; }
+    .site-folder { display: block; color: #0078d4; margin-top: 2px; margin-left: 4px; }
+    .site-classify-form { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+    .field { display: block; margin-bottom: 8px; font-size: 12px; color: #444; }
+    .field input, .field select {
+      display: block; width: 100%; margin-top: 4px; padding: 6px 8px;
+      border: 1px solid #ccc; border-radius: 4px; font: inherit; background: #fff;
+    }
+    .primary-btn {
+      width: 100%; padding: 8px 12px; border: none; border-radius: 4px;
+      background: #0078d4; color: #fff; font-size: 13px;
+    }
+    .site-status-block + .site-status-block { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="brand">
+      <img src="../../public/icons/icon48.png" alt="" />
+      <span>下載分類助手</span>
+    </div>
+    <div class="chrome">
+      <div class="popup">
+        <header>
+          <h1>下載分類助手</h1>
+          <a href="#">設定</a>
+        </header>
+        <section id="current-site-section">
+          <h2>當前網站</h2>
+          <div class="site-host">www.fantia.jp</div>
+          <div class="site-status-block">
+            <div class="site-status-title">分類狀態</div>
+            <ul class="site-status-list">
+              <li>
+                <span class="status-badge status-yes">已設定</span>
+                網站分類
+                <span class="site-folder">Creators/Fantia</span>
+              </li>
+              <li>
+                <span class="status-badge status-no">未命中</span>
+                自定義規則
+              </li>
+            </ul>
+          </div>
+          <form class="site-classify-form">
+            <label class="field">顯示名稱
+              <input type="text" value="Fantia" readonly />
+            </label>
+            <label class="field">目標資料夾
+              <input type="text" value="Creators/Fantia" readonly />
+            </label>
+            <label class="field">匹配方式
+              <select>
+                <option selected>來源網站（從此頁下載）</option>
+              </select>
+            </label>
+            <button type="button" class="primary-btn">儲存網站分類</button>
+          </form>
+          <div class="site-status-block">
+            <div class="site-status-title">歸因狀態</div>
+            <ul class="site-status-list">
+              <li><span class="status-badge status-no">平常下載</span>以當前頁面為來源</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="caption">Popup：當前網站分類與快速設定</div>
+  </div>
+</body>
+</html>

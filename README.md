@@ -129,6 +129,7 @@ npm run typecheck    # TypeScript 檢查
 npm run test:unit    # Vitest 單元測試
 npm run test:e2e     # Playwright e2e（scripts/run-e2e.sh；Linux 無顯示時可選 xvfb）
 npm run test:serve   # 本機模擬站（tests/fixtures）
+npm run pack         # build 後產出 store/download-classify.zip
 npm run install:edge # build 後提示於 Edge 載入 dist
 ```
 
@@ -144,3 +145,8 @@ npm run install:edge # build 後提示於 Edge 載入 dist
 ## 上架
 
 素材位於 `store/`，見 `store/README.md`。
+
+- 打包產物：`store/download-classify.zip`（`npm run pack`）
+- 擴充功能圖示：`public/icons/icon{16,32,48,128}.png`（向量原稿 `public/icons/icon.svg`）
+- 商店 logo：`store/icons/icon300.png`
+- 商店截圖（1280×800）：`store/screenshots/01`–`05`（`05` 檔名含 `-mock`，為 illustrative／非 live 擷取）

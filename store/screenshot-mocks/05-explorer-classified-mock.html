@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>ILLUSTRATIVE MOCK — 檔案總管分類結果</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    .stage {
+      width: 1280px; height: 800px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(165deg, #c9d6e4 0%, #a8b8c8 55%, #93a4b5 100%);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      position: relative;
+    }
+    .mock-banner {
+      position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+      z-index: 5;
+      background: #8a6914; color: #fff4ce;
+      padding: 8px 18px; border-radius: 6px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.02em;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+      white-space: nowrap;
+    }
+    .caption {
+      position: absolute; left: 40px; bottom: 28px;
+      color: #243447; font-size: 16px; font-weight: 600;
+      max-width: 560px; line-height: 1.4;
+    }
+    .caption small {
+      display: block; margin-top: 4px; font-size: 13px; font-weight: 500; color: #4a5a6a;
+    }
+    .desktop {
+      width: 1080px; height: 640px;
+      margin-top: 28px;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #6b7c8d;
+      box-shadow: 0 22px 60px rgba(20, 35, 55, 0.35);
+      display: grid;
+      grid-template-rows: 32px 40px 32px 1fr 24px;
+      overflow: hidden;
+    }
+    .titlebar {
+      background: #e8e8e8;
+      border-bottom: 1px solid #c8c8c8;
+      display: flex; align-items: center; padding: 0 10px; gap: 8px;
+      font-size: 12px; color: #222;
+    }
+    .win-controls { margin-left: auto; display: flex; gap: 2px; }
+    .win-controls span {
+      width: 46px; height: 24px; display: inline-flex; align-items: center; justify-content: center;
+      color: #333; font-size: 11px; background: transparent;
+    }
+    .toolbar {
+      display: flex; align-items: center; gap: 6px; padding: 0 10px;
+      border-bottom: 1px solid #ddd; background: #f3f3f3; font-size: 12px; color: #333;
+    }
+    .toolbar .btn {
+      padding: 4px 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff;
+    }
+    .address {
+      display: flex; align-items: center; gap: 8px; padding: 0 10px;
+      border-bottom: 1px solid #ddd; background: #fff; font-size: 12px;
+    }
+    .address-box {
+      flex: 1; display: flex; align-items: center; gap: 6px;
+      border: 1px solid #bbb; border-radius: 3px; padding: 3px 8px; background: #fff;
+      color: #222;
+    }
+    .address-box .seg { color: #0078d4; }
+    .address-box .sep { color: #888; }
+    .body { display: grid; grid-template-columns: 220px 1fr; min-height: 0; }
+    .nav {
+      background: #f0f0f0; border-right: 1px solid #ddd; padding: 10px 8px; font-size: 12px;
+    }
+    .nav-group { color: #666; font-size: 11px; margin: 8px 6px 4px; text-transform: uppercase; }
+    .nav-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px; border-radius: 4px; color: #222; margin-bottom: 2px;
+    }
+    .nav-item.active { background: #cce4f7; color: #005a9e; font-weight: 600; }
+    .nav-item.child { padding-left: 28px; }
+    .folder-ico {
+      width: 16px; height: 12px; background: #ffb900; border-radius: 1px;
+      box-shadow: inset 0 2px 0 #ffd24d; flex-shrink: 0;
+    }
+    .main { display: flex; flex-direction: column; min-height: 0; background: #fff; }
+    .cols {
+      display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 0.7fr;
+      padding: 6px 12px; font-size: 11px; color: #555; border-bottom: 1px solid #e5e5e5;
+      background: #fafafa;
+    }
+    .row {
+      display: grid; grid-template-columns: 2fr 1.1fr 0.9fr 0.7fr;
+      padding: 8px 12px; font-size: 13px; align-items: center;
+      border-bottom: 1px solid #f0f0f0; color: #1a1a1a;
+    }
+    .row.selected { background: #cce4f7; }
+    .name { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+    .file-ico {
+      width: 14px; height: 16px; border: 1px solid #5b9bd5; border-radius: 2px;
+      background: linear-gradient(#fff, #e8f2fb); flex-shrink: 0;
+    }
+    .file-ico.zip { border-color: #c27c0e; background: linear-gradient(#fff8e8, #f5e6c8); }
+    .file-ico.png { border-color: #70ad47; background: linear-gradient(#f3faf0, #d9efc8); }
+    .file-ico.pdf { border-color: #c00000; background: linear-gradient(#fff0f0, #f5d0d0); }
+    .status {
+      border-top: 1px solid #ddd; background: #f3f3f3;
+      display: flex; align-items: center; padding: 0 12px;
+      font-size: 11px; color: #444;
+    }
+    .callout {
+      margin: 14px 12px; padding: 10px 12px;
+      border: 1px dashed #8a6914; background: #fff8e1; border-radius: 6px;
+      font-size: 12px; color: #5a4a10; line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="mock-banner">ILLUSTRATIVE MOCK · 非真實檔案總管擷取 · 僅供商店示意</div>
+    <div class="desktop" aria-label="Illustrative file manager mock">
+      <div class="titlebar">
+        <span class="folder-ico"></span>
+        Fantia — 檔案總管（示意）
+        <div class="win-controls"><span>—</span><span>□</span><span>×</span></div>
+      </div>
+      <div class="toolbar">
+        <span class="btn">←</span>
+        <span class="btn">→</span>
+        <span class="btn">↑</span>
+        <span style="margin-left:8px;color:#666;">檢視 · 詳細資料</span>
+      </div>
+      <div class="address">
+        <span style="color:#666;">位址</span>
+        <div class="address-box">
+          <span class="folder-ico"></span>
+          <span class="seg">本機</span><span class="sep">›</span>
+          <span class="seg">Downloads</span><span class="sep">›</span>
+          <span class="seg">Creators</span><span class="sep">›</span>
+          <strong>Fantia</strong>
+        </div>
+      </div>
+      <div class="body">
+        <aside class="nav">
+          <div class="nav-group">快速存取</div>
+          <div class="nav-item"><span class="folder-ico"></span>下載</div>
+          <div class="nav-group">Downloads</div>
+          <div class="nav-item child"><span class="folder-ico"></span>Cloud</div>
+          <div class="nav-item child"><span class="folder-ico"></span>Documents</div>
+          <div class="nav-item child active"><span class="folder-ico"></span>Creators</div>
+          <div class="nav-item child" style="padding-left:40px;color:#005a9e;font-weight:600;">
+            <span class="folder-ico"></span>Fantia
+          </div>
+          <div class="nav-item child" style="padding-left:40px;"><span class="folder-ico"></span>FANBOX</div>
+          <div class="nav-item child"><span class="folder-ico"></span>Others</div>
+        </aside>
+        <div class="main">
+          <div class="cols">
+            <div>名稱</div><div>修改日期</div><div>類型</div><div>大小</div>
+          </div>
+          <div class="row selected">
+            <div class="name"><span class="file-ico zip"></span>cover-art.zip</div>
+            <div>2026/03/20 10:42</div><div>壓縮 (zipped) 資料夾</div><div>24.1 MB</div>
+          </div>
+          <div class="row">
+            <div class="name"><span class="file-ico png"></span>gallery-03.png</div>
+            <div>2026/03/20 09:18</div><div>PNG 影像</div><div>3.4 MB</div>
+          </div>
+          <div class="row">
+            <div class="name"><span class="file-ico pdf"></span>post-notes.pdf</div>
+            <div>2026/03/19 21:05</div><div>Adobe PDF 文件</div><div>812 KB</div>
+          </div>
+          <div class="callout">
+            <strong>示意說明（非 live 擷取）：</strong>
+            擴充功能在下載當下將檔案存入 <code>Downloads/Creators/Fantia/</code>。
+            此畫面為商店用 illustrative mock，不是作業系統檔案總管的真實截圖。資料僅存本機。
+          </div>
+        </div>
+      </div>
+      <div class="status">3 個項目 · 選取 1 個項目 · Creators/Fantia</div>
+    </div>
+    <div class="caption">
+      下載後：檔案已分類至子資料夾（illustrative mock）
+      <small>非真實檔案總管擷取 · 上架前請以此標示理解素材性質</small>
+    </div>
+  </div>
+</body>
+</html>

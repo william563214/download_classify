@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>Options - 網站分類與自定義規則</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    .stage {
+      width: 1280px; height: 800px;
+      padding: 36px 48px 64px;
+      background:
+        radial-gradient(ellipse at 20% 10%, #e8f3fc 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, #d6e8f8 0%, transparent 45%),
+        linear-gradient(160deg, #edf3f9 0%, #d8e4f0 100%);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      position: relative;
+    }
+    .caption {
+      position: absolute; left: 48px; bottom: 28px;
+      color: #3b4a5a; font-size: 18px; font-weight: 600;
+    }
+    .panel {
+      max-width: 900px; margin: 0 auto; max-height: 700px; overflow: hidden;
+      color: #1a1a1a;
+    }
+    header, section {
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    h1 { margin: 0 0 4px; font-size: 22px; }
+    h2 { margin: 0 0 12px; font-size: 16px; }
+    p { margin: 0 0 8px; color: #555; }
+    .hint { font-size: 12px; color: #666; }
+    button {
+      padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;
+      background: #fff; margin-right: 8px; margin-bottom: 8px; font: inherit;
+    }
+    .rule-card {
+      border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px;
+      margin-bottom: 10px; background: #fafafa;
+    }
+    .rule-card label { display: block; margin-bottom: 8px; font-size: 13px; }
+    .rule-card input, .rule-card select {
+      width: 100%; margin-top: 4px; padding: 6px 8px;
+      border: 1px solid #ccc; border-radius: 4px; font: inherit; background: #fff;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .row-inline { display: flex; gap: 10px; align-items: center; }
+    .row-inline label { flex: 1; }
+    .tag { display: inline-block; background: #e8f3fc; color: #0078d4; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="panel">
+      <header>
+        <h1>下載分類助手設定</h1>
+        <p>管理分類規則、檔名設定與歷史匯入</p>
+      </header>
+      <section>
+        <h2>網站分類</h2>
+        <p class="hint">依網域將下載自動分到指定資料夾。支援子網域（例如 fantia.jp 會匹配 www.fantia.jp）</p>
+        <div class="rule-card">
+          <div class="grid-2">
+            <label>顯示名稱<input value="Fantia" readonly /></label>
+            <label>網域<input value="fantia.jp" readonly /></label>
+            <label>目標資料夾<input value="Creators/Fantia" readonly /></label>
+            <label>匹配方式
+              <select><option selected>來源網站</option></select>
+            </label>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="grid-2">
+            <label>顯示名稱<input value="FANBOX" readonly /></label>
+            <label>網域<input value="fanbox.cc" readonly /></label>
+            <label>目標資料夾<input value="Creators/FANBOX" readonly /></label>
+            <label>匹配方式
+              <select><option selected>來源網站</option></select>
+            </label>
+          </div>
+        </div>
+        <button type="button">新增網站分類</button>
+      </section>
+      <section>
+        <h2>自定義分類規則</h2>
+        <p class="hint">進階規則，可組合檔名、副檔名、來源頁面等。同一規則內多個條件為 OR 任一命中即匹配</p>
+        <div class="rule-card">
+          <div class="grid-2">
+            <label>規則名稱<input value="PDF 文件" readonly /></label>
+            <label>目標資料夾<input value="Documents/PDF" readonly /></label>
+            <label>優先級<input value="40" readonly /></label>
+            <label>條件摘要
+              <div style="margin-top:6px">
+                <span class="tag">副檔名 = pdf</span>
+                <span class="tag">檔名含 report</span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <button type="button">新增規則</button>
+      </section>
+    </div>
+    <div class="caption">Options：網站分類與自定義規則</div>
+  </div>
+</body>
+</html>

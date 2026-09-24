@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>Popup - 最近下載與統計</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    .stage {
+      width: 1280px; height: 800px;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(ellipse at 20% 10%, #e8f3fc 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, #d6e8f8 0%, transparent 45%),
+        linear-gradient(160deg, #edf3f9 0%, #d8e4f0 100%);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      position: relative;
+    }
+    .caption {
+      position: absolute; left: 48px; bottom: 40px;
+      color: #3b4a5a; font-size: 18px; font-weight: 600;
+    }
+    .brand {
+      position: absolute; left: 48px; top: 40px;
+      display: flex; align-items: center; gap: 12px; color: #1a1a1a;
+    }
+    .brand img { width: 40px; height: 40px; object-fit: cover; border-radius: 10px; }
+    .brand span { font-size: 22px; font-weight: 700; }
+    .chrome {
+      width: 420px; background: #f7f8fa; border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(15, 40, 70, 0.18);
+      border: 1px solid #c9d6e4; overflow: hidden;
+    }
+    .popup { padding: 12px; width: 400px; margin: 0 auto; font-size: 13px; color: #1a1a1a; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    h1 { margin: 0; font-size: 16px; }
+    h2 { margin: 0 0 8px; font-size: 13px; color: #444; }
+    a { color: #0078d4; text-decoration: none; font-size: 12px; }
+    section { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    #stats-list li { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #f0f0f0; }
+    #recent-list li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    #recent-list li:last-child { border-bottom: none; }
+    .filename { font-weight: 600; word-break: break-all; }
+    .meta { margin-top: 4px; color: #666; font-size: 12px; }
+    .badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px; margin-left: 4px; }
+    .badge-high { background: #dff6dd; color: #107c10; }
+    .badge-medium { background: #fff4ce; color: #8a6914; }
+    .count { color: #0078d4; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="brand">
+      <img src="../../public/icons/icon48.png" alt="" />
+      <span>下載分類助手</span>
+    </div>
+    <div class="chrome">
+      <div class="popup">
+        <header>
+          <h1>下載分類助手</h1>
+          <a href="#">設定</a>
+        </header>
+        <section>
+          <h2>今日分類</h2>
+          <ul id="stats-list">
+            <li><span>Creators/Fantia</span><span class="count">8</span></li>
+            <li><span>Cloud/MEGA</span><span class="count">3</span></li>
+            <li><span>Documents/PDF</span><span class="count">2</span></li>
+            <li><span>Others</span><span class="count">1</span></li>
+          </ul>
+        </section>
+        <section>
+          <h2>最近下載</h2>
+          <ul id="recent-list">
+            <li>
+              <div class="filename">cover-art.zip</div>
+              <div class="meta">Creators/Fantia · fantia.jp <span class="badge badge-high">已分類</span></div>
+            </li>
+            <li>
+              <div class="filename">project-notes.pdf</div>
+              <div class="meta">Documents/PDF · drive.google.com <span class="badge badge-medium">歸因待確認</span></div>
+            </li>
+            <li>
+              <div class="filename">backup-2026-03-20.rar</div>
+              <div class="meta">Cloud/MEGA · mega.nz <span class="badge badge-high">已分類</span></div>
+            </li>
+            <li>
+              <div class="filename">readme.txt</div>
+              <div class="meta">Others · example.com <span class="badge badge-medium">待分類</span></div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <div class="caption">Popup：最近下載與今日統計</div>
+  </div>
+</body>
+</html>
