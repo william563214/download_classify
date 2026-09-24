@@ -1,19 +1,43 @@
 # Edge Add-ons 上架素材
 
-## 套件打包
+本目錄存放商店描述、隱私政策與上架用 zip。`manifest` 實際權限見專案根目錄 `manifest.json`：
 
-產出檔案：**`store/download-classify.zip`**（由 `dist/` 打包）。
-
-```bash
-npm run pack
-# 等同：
-# npm run build && bash scripts/pack-store.sh
+```json
+"permissions": ["downloads", "storage", "tabs", "webNavigation", "windows"],
+"host_permissions": ["<all_urls>"]
 ```
 
-手動等價步驟：
+## 打包上架 zip（建議）
+
+從乾淨建置產出 `store/download-classify.zip`（內容為 `dist/` 根目錄，可直接上傳 Partner Center）：
+
+```bash
+npm install
+npm run pack:store
+# 等同：npm run pack
+```
+
+`pack:store`／`pack` 會依序：
+
+1. 執行 `npm run build`（含 typecheck + Vite 建置）
+2. 刪除舊的 `store/download-classify.zip`（若存在）
+3. 將 `dist/` 內容壓成 `store/download-classify.zip`
+
+實作腳本：`scripts/pack-store.sh`。
+
+上傳前可抽查：
+
+```bash
+unzip -l store/download-classify.zip | head
+```
+
+zip 內應可見 `manifest.json`、`src/`、`icons/`、`_locales/` 等，且路徑不以 `dist/` 為前綴。
+
+### 手動等價步驟
 
 ```bash
 npm run build
+rm -f store/download-classify.zip
 cd dist && zip -r ../store/download-classify.zip .
 ```
 
@@ -88,31 +112,37 @@ python scripts/capture_store_screenshots.py
 - **網站分類**：為特定網域指定目標資料夾（Popup 可快速設定）
 - **自定義規則**：依來源站、下載站、檔名、副檔名等條件分類
 - **副檔名對照**：常見副檔名自動分類
-- **分類詢問**：未命中網站/網域規則時，下載完成後提示建立規則
-- **歸因詢問**：在指定網盤站下載時，可選擇實際來源（A→B），確認後才套用
+- **分類詢問**：未命中網站/網域規則時，下載完成後提示建立規則（僅命中副檔名或啟發式仍算未分類）
+- **歸因詢問**：在指定網盤站下載時，可選擇實際來源（A→B），確認後才套用；確認歸因或儲存規則不會搬移已下載檔案
 - **檔名標記**：可選在檔名加上來源網域
 - **歷史匯入**：匯入瀏覽器既有下載紀錄供查閱
 
-平常下載以當前頁面為來源，不會自動將論壇來源套用到網盤下載。A→B 歸因僅在您於詢問頁確認後寫入紀錄。
+平常下載以當前頁面為來源，不會自動將論壇來源套用到網盤下載。分類與歸因分開處理；A→B 歸因僅在您於詢問頁確認後寫入紀錄。
 
 隱私承諾：所有資料僅儲存於本機，不會上傳至任何伺服器。
 
 ## 權限說明（提交審核用）
 
-- **downloads**：攔截下載，依規則建議存檔路徑與檔名
-- **storage**：本機儲存規則與下載紀錄
-- **tabs**：取得發起下載的分頁，追蹤來源
-- **webNavigation**：記錄同分頁導覽，輔助歸因候選
-- **windows**：開啟分類/歸因詢問彈窗
-- **所有網站**：輕量 Content Script 記錄外連點擊，不修改網頁內容
+以下與 `manifest.json` 一一對應，無多餘、無缺漏：
+
+| Manifest 權限 | 審核說明 |
+|---|---|
+| `downloads` | 攔截下載，於 `onDeterminingFilename` 依規則建議存檔路徑與檔名；可搜尋既有下載供歷史匯入 |
+| `storage` | 於本機使用 `chrome.storage.local` 與 `chrome.storage.session` 儲存規則、設定與暫存脈絡；**不使用** `chrome.storage.sync`，亦不會上傳使用者下載的檔案 |
+| `tabs` | 取得發起下載的分頁與 opener，解析來源網域 |
+| `webNavigation` | 記錄同分頁導覽，輔助來源解析與歸因候選 |
+| `windows` | 開啟分類／歸因詢問彈窗 |
+| `<all_urls>`（host_permissions） | 輕量 Content Script 記錄外連點擊，不修改網頁內容、不讀取頁面敏感表單 |
 
 ## 隱私政策摘要
 
-不收集、不傳輸、不出售個人資料。規則與紀錄存於 `chrome.storage` 與 IndexedDB。
+不收集、不傳輸、不出售個人資料。規則與設定存於 `chrome.storage.local`；外連／導覽／歸因暫存存於 `chrome.storage.session`；下載紀錄索引存於本機 IndexedDB。完整政策見 `PRIVACY.md`。
 
 ## 審核注意事項
 
 - `<all_urls>` 僅用於外連點擊追蹤，非資料收集
+- `storage` 僅本機 local／session，不等於也不會把下載檔案上傳到雲端或跨裝置同步
 - 強調資料僅存本機
-- A→B 歸因需使用者於詢問頁確認，非自動套用
+- 分類 ≠ 歸因；A→B 歸因需使用者於詢問頁確認，非自動套用
+- 確認歸因或儲存規則不會搬移已下載檔案
 - 截圖 05 為 illustrative mock，非 live 檔案總管擷取（見上方說明）
