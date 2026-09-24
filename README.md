@@ -117,16 +117,25 @@ Content Script 記錄：
 | 外連點擊、分頁脈絡、歸因候選 | `chrome.storage.session` |
 | 下載紀錄 | IndexedDB `download_classify_db` |
 
+**資料僅本機、不上傳**：上述皆留在使用者裝置／瀏覽器內，本專案不提供雲端同步或遙測上傳。隱私細節見下方與 `store/PRIVACY.md`。
+
 ## 開發
+
+測試計畫見 [`docs/TESTING.md`](docs/TESTING.md)（承接並取代已關閉的 docs-only PR #16）。
 
 ```bash
 npm run dev          # 監聽建置
-npm run test:e2e     # Playwright 測試
-npm run test:serve   # 本機模擬站
-npm run install:edge # 安裝到 Edge
+npm run typecheck    # TypeScript 檢查
+npm run test:unit    # Vitest 單元測試
+npm run test:e2e     # Playwright e2e（scripts/run-e2e.sh；Linux 無顯示時可選 xvfb）
+npm run test:serve   # 本機模擬站（tests/fixtures）
+npm run install:edge # build 後提示於 Edge 載入 dist
 ```
 
-模擬站路徑見 `.temp/tests/fixtures/`（Fantia / FANBOX / MEGA 等）。
+- **正式**模擬站／e2e fixtures：`tests/fixtures/`（Fantia／FANBOX／MEGA／Forum）
+- **`.temp/`**：僅本機測試 scratch（已 gitignore），**不是**雲端、也**不是** CI／乾淨環境依賴；請勿把正式腳本只指到 `.temp/`
+
+詳細步驟、xvfb／CI、不搬檔硬斷言與已知限制見 `docs/TESTING.md`。
 
 ## 隱私
 
