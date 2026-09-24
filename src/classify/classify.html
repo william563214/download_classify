@@ -3,80 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>下載分類</title>
+    <title data-i18n="classifyPageTitle">下載分類</title>
     <link rel="stylesheet" href="classify.css" />
   </head>
   <body>
     <header>
-      <h1 id="page-title">下載分類</h1>
-      <p id="subtitle">為此下載建立分類規則，之後同類檔案會自動歸類</p>
+      <h1 id="page-title" data-i18n="classifyTitleDefault">下載分類</h1>
+      <p id="subtitle" data-i18n="classifySubtitleDefault">為此下載建立分類規則，之後同類檔案會自動歸類</p>
     </header>
 
     <section id="download-info" class="card hidden">
-      <h2>下載資訊</h2>
+      <h2 data-i18n="classifyDownloadInfo">下載資訊</h2>
       <dl>
-        <dt>檔名</dt>
+        <dt data-i18n="classifyFilename">檔名</dt>
         <dd id="info-filename"></dd>
-        <dt>目前分類</dt>
+        <dt data-i18n="classifyCurrentCategory">目前分類</dt>
         <dd id="info-category"></dd>
-        <dt>下載網站</dt>
+        <dt data-i18n="classifyDownloadSite">下載網站</dt>
         <dd id="info-download-site"></dd>
       </dl>
     </section>
 
     <section id="attribution-section" class="card hidden">
-      <h2>選擇來源歸因</h2>
-      <p class="note">A→B 歸因僅在此詢問頁套用，不會搬移已下載檔案，平常下載以當前頁面為準</p>
+      <h2 data-i18n="classifySelectAttribution">選擇來源歸因</h2>
+      <p class="note" data-i18n="classifyAttributionNote">A→B 歸因僅在此詢問頁套用，不會搬移已下載檔案，平常下載以當前頁面為準</p>
       <fieldset id="attribution-options" class="attribution-list"></fieldset>
     </section>
 
     <section id="rule-form" class="card hidden">
-      <h2>建立規則（可選）</h2>
+      <h2 data-i18n="classifyCreateRule">建立規則（可選）</h2>
       <label class="field">
-        分類名稱
+        <span data-i18n="classifyRuleName">分類名稱</span>
         <input type="text" id="rule-name" />
       </label>
       <label class="field">
-        目標資料夾
-        <input type="text" id="rule-folder" placeholder="例如 Work/Docs" />
+        <span data-i18n="classifyTargetFolder">目標資料夾</span>
+        <input type="text" id="rule-folder" data-i18n-placeholder="classifyFolderPlaceholder" placeholder="例如 Work/Docs" />
       </label>
       <label class="field">
-        優先級（數字越小越優先）
+        <span data-i18n="classifyPriority">優先級（數字越小越優先）</span>
         <input type="number" id="rule-priority" value="50" min="1" />
       </label>
 
       <fieldset>
-        <legend>匹配條件</legend>
+        <legend data-i18n="classifyMatchers">匹配條件</legend>
         <label class="check">
           <input type="checkbox" id="match-source-site" />
-          來源網站：<span id="label-source-site"></span>
+          <span data-i18n="classifyMatchSourceSite">來源網站：</span><span id="label-source-site"></span>
         </label>
         <label class="check">
           <input type="checkbox" id="match-download-site" />
-          下載網站：<span id="label-download-site"></span>
+          <span data-i18n="classifyMatchDownloadSite">下載網站：</span><span id="label-download-site"></span>
         </label>
         <label class="check">
           <input type="checkbox" id="match-extension" />
-          副檔名：<span id="label-extension"></span>
+          <span data-i18n="classifyMatchExtension">副檔名：</span><span id="label-extension"></span>
         </label>
         <label class="check">
           <input type="checkbox" id="match-filename" />
-          完整檔名：<span id="label-filename"></span>
+          <span data-i18n="classifyMatchFilename">完整檔名：</span><span id="label-filename"></span>
         </label>
       </fieldset>
 
-      <p class="note">規則會套用於之後的下載，目前檔案位置不會自動搬移</p>
+      <p class="note" data-i18n="classifyRuleNote">規則會套用於之後的下載，目前檔案位置不會自動搬移</p>
       <p id="error-message" class="error hidden"></p>
     </section>
 
     <footer>
-      <button type="button" id="confirm-attribution" class="primary hidden">確認歸因</button>
-      <button type="button" id="save-rule" class="primary">儲存規則</button>
-      <button type="button" id="skip-rule">略過</button>
+      <button type="button" id="confirm-attribution" class="primary hidden" data-i18n="classifyConfirmAttribution">確認歸因</button>
+      <button type="button" id="save-rule" class="primary" data-i18n="classifySaveRule">儲存規則</button>
+      <button type="button" id="skip-rule" data-i18n="classifySkip">略過</button>
     </footer>
 
-    <section id="loading">載入中...</section>
-    <section id="not-found" class="hidden">找不到下載紀錄</section>
+    <section id="loading" data-i18n="classifyLoading">載入中...</section>
+    <section id="not-found" class="hidden" data-i18n="classifyNotFound">找不到下載紀錄</section>
 
     <script type="module" src="classify.ts"></script>
   </body>

@@ -1,4 +1,5 @@
 import { extract_extension } from "./matcher";
+import { t } from "./i18n";
 import type { ClassificationRule, DownloadRecord, RuleMatchers } from "./types";
 
 export interface RuleFormInput {
@@ -30,7 +31,9 @@ export function suggest_rule_defaults(record: DownloadRecord): {
     use_download_site: !has_distinct_source && Boolean(record.download_site),
     use_extension: Boolean(extension),
     use_filename: false,
-    name: has_distinct_source ? `${record.attributed_site} 下載` : record.category || "新分類",
+    name: has_distinct_source
+      ? t("ruleNameDownloadFromSite", record.attributed_site)
+      : record.category || t("categoryNew"),
     target_folder: record.target_folder || "Others",
     priority: 50,
   };
@@ -60,7 +63,7 @@ export function build_rule_from_form(input: RuleFormInput): ClassificationRule {
 
   return {
     id: `rule_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    name: input.name.trim() || "新分類",
+    name: input.name.trim() || t("categoryNew"),
     target_folder: input.target_folder.trim() || "Others",
     priority: input.priority,
     enabled: true,

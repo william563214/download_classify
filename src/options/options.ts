@@ -8,6 +8,7 @@ import {
   save_settings,
   save_site_rules,
 } from "../shared/storage";
+import { apply_document_i18n, t } from "../shared/i18n";
 import type {
   AppSettings,
   ClassificationRule,
@@ -46,20 +47,20 @@ function render_site_rules(): void {
     .map(
       (rule, index) => `
       <div class="rule-card site-rule-card" data-site-index="${index}">
-        <label>顯示名稱 <input type="text" class="site-name" value="${escape_attr(rule.name)}" /></label>
-        <label>網域 <input type="text" class="site-host" placeholder="例如 fantia.jp 或 *.google.com" value="${escape_attr(rule.host)}" /></label>
-        <label>匹配方式
+        <label>${escape_html(t("optionsLabelDisplayName"))} <input type="text" class="site-name" value="${escape_attr(rule.name)}" /></label>
+        <label>${escape_html(t("optionsLabelHost"))} <input type="text" class="site-host" placeholder="${escape_attr(t("optionsHostPlaceholder"))}" value="${escape_attr(rule.host)}" /></label>
+        <label>${escape_html(t("optionsLabelMatchTarget"))}
           <select class="site-match-target">
-            <option value="source" ${rule.match_target === "source" ? "selected" : ""}>來源網站</option>
-            <option value="download" ${rule.match_target === "download" ? "selected" : ""}>下載網站</option>
-            <option value="either" ${rule.match_target === "either" ? "selected" : ""}>來源或下載網站</option>
+            <option value="source" ${rule.match_target === "source" ? "selected" : ""}>${escape_html(t("matchRoleSource"))}</option>
+            <option value="download" ${rule.match_target === "download" ? "selected" : ""}>${escape_html(t("matchRoleDownload"))}</option>
+            <option value="either" ${rule.match_target === "either" ? "selected" : ""}>${escape_html(t("matchRoleEither"))}</option>
           </select>
         </label>
-        <label>目標資料夾 <input type="text" class="site-folder" value="${escape_attr(rule.target_folder)}" /></label>
-        <label>優先級 <input type="number" class="site-priority" value="${rule.priority}" /></label>
-        <label><input type="checkbox" class="site-enabled" ${rule.enabled ? "checked" : ""} /> 啟用</label>
+        <label>${escape_html(t("optionsLabelTargetFolder"))} <input type="text" class="site-folder" value="${escape_attr(rule.target_folder)}" /></label>
+        <label>${escape_html(t("optionsLabelPriority"))} <input type="number" class="site-priority" value="${rule.priority}" /></label>
+        <label><input type="checkbox" class="site-enabled" ${rule.enabled ? "checked" : ""} /> ${escape_html(t("optionsLabelEnabled"))}</label>
         <div class="rule-actions">
-          <button type="button" class="delete-site-rule">刪除</button>
+          <button type="button" class="delete-site-rule">${escape_html(t("optionsDelete"))}</button>
         </div>
       </div>`
     )
@@ -85,17 +86,17 @@ function render_rules(): void {
     .map(
       (rule, index) => `
       <div class="rule-card" data-index="${index}">
-        <label>名稱 <input type="text" class="rule-name" value="${escape_attr(rule.name)}" /></label>
-        <label>目標資料夾 <input type="text" class="rule-folder" value="${escape_attr(rule.target_folder)}" /></label>
-        <label>優先級 <input type="number" class="rule-priority" value="${rule.priority}" /></label>
-        <label><input type="checkbox" class="rule-enabled" ${rule.enabled ? "checked" : ""} /> 啟用</label>
-        <label>來源網域（每行一個 pattern）<textarea class="rule-source-site" rows="2">${escape_html(join_lines(rule.matchers.source_site))}</textarea></label>
-        <label>來源頁面 pattern<textarea class="rule-source-page" rows="2">${escape_html(join_lines(rule.matchers.source_page))}</textarea></label>
-        <label>下載站 pattern<textarea class="rule-site" rows="2">${escape_html(join_lines(rule.matchers.site))}</textarea></label>
-        <label>檔名 pattern<textarea class="rule-filename" rows="2">${escape_html(join_lines(rule.matchers.filename))}</textarea></label>
-        <label>副檔名（逗號分隔）<input type="text" class="rule-extension" value="${escape_attr((rule.matchers.extension ?? []).join(","))}" /></label>
+        <label>${escape_html(t("optionsLabelName"))} <input type="text" class="rule-name" value="${escape_attr(rule.name)}" /></label>
+        <label>${escape_html(t("optionsLabelTargetFolder"))} <input type="text" class="rule-folder" value="${escape_attr(rule.target_folder)}" /></label>
+        <label>${escape_html(t("optionsLabelPriority"))} <input type="number" class="rule-priority" value="${rule.priority}" /></label>
+        <label><input type="checkbox" class="rule-enabled" ${rule.enabled ? "checked" : ""} /> ${escape_html(t("optionsLabelEnabled"))}</label>
+        <label>${escape_html(t("optionsLabelSourceSites"))}<textarea class="rule-source-site" rows="2">${escape_html(join_lines(rule.matchers.source_site))}</textarea></label>
+        <label>${escape_html(t("optionsLabelSourcePages"))}<textarea class="rule-source-page" rows="2">${escape_html(join_lines(rule.matchers.source_page))}</textarea></label>
+        <label>${escape_html(t("optionsLabelDownloadSites"))}<textarea class="rule-site" rows="2">${escape_html(join_lines(rule.matchers.site))}</textarea></label>
+        <label>${escape_html(t("optionsLabelFilenames"))}<textarea class="rule-filename" rows="2">${escape_html(join_lines(rule.matchers.filename))}</textarea></label>
+        <label>${escape_html(t("optionsLabelExtensions"))}<input type="text" class="rule-extension" value="${escape_attr((rule.matchers.extension ?? []).join(","))}" /></label>
         <div class="rule-actions">
-          <button type="button" class="delete-rule">刪除</button>
+          <button type="button" class="delete-rule">${escape_html(t("optionsDelete"))}</button>
         </div>
       </div>`
     )
@@ -121,11 +122,11 @@ function render_extension_rules(): void {
     .map(
       (rule, index) => `
       <div class="rule-card" data-ext-index="${index}">
-        <label>類型 <input type="text" class="ext-name" value="${escape_attr(rule.name)}" /></label>
-        <label>副檔名 <input type="text" class="ext-extension" value="${escape_attr(rule.extension)}" /></label>
-        <label>目標資料夾 <input type="text" class="ext-folder" value="${escape_attr(rule.target_folder)}" /></label>
+        <label>${escape_html(t("optionsLabelType"))} <input type="text" class="ext-name" value="${escape_attr(rule.name)}" /></label>
+        <label>${escape_html(t("optionsLabelExtension"))} <input type="text" class="ext-extension" value="${escape_attr(rule.extension)}" /></label>
+        <label>${escape_html(t("optionsLabelTargetFolder"))} <input type="text" class="ext-folder" value="${escape_attr(rule.target_folder)}" /></label>
         <div class="rule-actions">
-          <button type="button" class="delete-ext-rule">刪除</button>
+          <button type="button" class="delete-ext-rule">${escape_html(t("optionsDelete"))}</button>
         </div>
       </div>`
     )
@@ -206,6 +207,7 @@ function escape_attr(value: string): string {
 }
 
 async function load_settings_ui(): Promise<void> {
+  apply_document_i18n();
   const settings = await get_settings();
   current_rules = await get_rules();
   current_site_rules = await get_site_rules();
@@ -268,7 +270,7 @@ async function save_all_settings(): Promise<void> {
 
   const status = document.getElementById("save-status");
   if (status) {
-    status.textContent = "已儲存";
+    status.textContent = t("optionsSaved");
     setTimeout(() => {
       status.textContent = "";
     }, 2000);
@@ -283,7 +285,11 @@ async function run_import(force: boolean): Promise<void> {
   })) as ImportStats;
 
   if (status) {
-    status.textContent = `匯入 ${result.imported} 筆，略過 ${result.skipped} 筆，共 ${result.total} 筆`;
+    status.textContent = t("optionsImportStats", [
+      String(result.imported),
+      String(result.skipped),
+      String(result.total),
+    ]);
   }
 }
 
@@ -328,7 +334,7 @@ async function import_rules_json(file: File): Promise<void> {
 document.getElementById("add-site-rule")?.addEventListener("click", () => {
   current_site_rules.push({
     id: generate_id(),
-    name: "新網站",
+    name: t("optionsDefaultSiteName"),
     host: "",
     target_folder: "Sites",
     match_target: "either",
@@ -341,7 +347,7 @@ document.getElementById("add-site-rule")?.addEventListener("click", () => {
 document.getElementById("add-rule")?.addEventListener("click", () => {
   current_rules.push({
     id: generate_id(),
-    name: "新規則",
+    name: t("optionsDefaultRuleName"),
     target_folder: "Others",
     priority: 100,
     enabled: true,
@@ -352,7 +358,7 @@ document.getElementById("add-rule")?.addEventListener("click", () => {
 
 document.getElementById("add-extension-rule")?.addEventListener("click", () => {
   current_extension_rules.push({
-    name: "新類型",
+    name: t("optionsDefaultExtName"),
     extension: "txt",
     target_folder: "Others",
   });

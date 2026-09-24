@@ -1,4 +1,5 @@
 import { build_rule_from_form } from "../shared/rule-builder";
+import { t } from "../shared/i18n";
 import {
   get_attribution_candidates,
   get_download_record,
@@ -29,7 +30,7 @@ export async function save_selected_attribution(
 ): Promise<{ ok: boolean; error?: string }> {
   const candidate = await resolve_selected_candidate(download_id, selected_attribution_id);
   if (!candidate) {
-    return { ok: false, error: "沒有可選的歸因項目" };
+    return { ok: false, error: t("errorNoAttributionCandidates") };
   }
 
   await update_download_attribution(
@@ -49,7 +50,7 @@ export async function save_rule_from_unclassified(
 ): Promise<{ ok: boolean; error?: string }> {
   const record = await get_download_record(payload.download_id);
   if (!record) {
-    return { ok: false, error: "找不到下載紀錄" };
+    return { ok: false, error: t("errorDownloadNotFound") };
   }
 
   const candidate = await resolve_selected_candidate(
@@ -93,7 +94,7 @@ export async function save_rule_from_unclassified(
 
   const matcher_keys = Object.values(rule.matchers).filter((value) => value?.length);
   if (!matcher_keys.length) {
-    return { ok: false, error: "請至少選擇一項匹配條件" };
+    return { ok: false, error: t("errorMatchersRequired") };
   }
 
   const rules = await get_rules();
@@ -117,7 +118,7 @@ export async function confirm_attribution_only(
 ): Promise<{ ok: boolean; error?: string; keep_open?: boolean }> {
   const record = await get_download_record(download_id);
   if (!record) {
-    return { ok: false, error: "找不到下載紀錄" };
+    return { ok: false, error: t("errorDownloadNotFound") };
   }
 
   const result = await save_selected_attribution(download_id, selected_attribution_id);

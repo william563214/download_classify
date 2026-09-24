@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import type { AppSettings, ClassificationRule, ExtensionRule } from "./types";
 
 export const db_name = "download_classify_db";
@@ -63,32 +64,40 @@ export const default_settings: AppSettings = {
 
 export const default_classification_rules: ClassificationRule[] = [];
 
-export const default_extension_rules: ExtensionRule[] = [
-  { name: "文件", extension: "pdf", target_folder: "Documents" },
-  { name: "文件", extension: "doc", target_folder: "Documents" },
-  { name: "文件", extension: "docx", target_folder: "Documents" },
-  { name: "文件", extension: "xlsx", target_folder: "Documents" },
-  { name: "文件", extension: "pptx", target_folder: "Documents" },
-  { name: "壓縮檔", extension: "zip", target_folder: "Archives" },
-  { name: "壓縮檔", extension: "rar", target_folder: "Archives" },
-  { name: "壓縮檔", extension: "7z", target_folder: "Archives" },
-  { name: "壓縮檔", extension: "tar", target_folder: "Archives" },
-  { name: "壓縮檔", extension: "gz", target_folder: "Archives" },
-  { name: "圖片", extension: "png", target_folder: "Media/Images" },
-  { name: "圖片", extension: "jpg", target_folder: "Media/Images" },
-  { name: "圖片", extension: "jpeg", target_folder: "Media/Images" },
-  { name: "圖片", extension: "gif", target_folder: "Media/Images" },
-  { name: "圖片", extension: "webp", target_folder: "Media/Images" },
-  { name: "圖片", extension: "svg", target_folder: "Media/Images" },
-  { name: "影片", extension: "mp4", target_folder: "Media/Video" },
-  { name: "影片", extension: "mkv", target_folder: "Media/Video" },
-  { name: "影片", extension: "avi", target_folder: "Media/Video" },
-  { name: "影片", extension: "mov", target_folder: "Media/Video" },
-  { name: "影片", extension: "webm", target_folder: "Media/Video" },
-  { name: "音訊", extension: "mp3", target_folder: "Media/Audio" },
-  { name: "音訊", extension: "flac", target_folder: "Media/Audio" },
-  { name: "音訊", extension: "wav", target_folder: "Media/Audio" },
-  { name: "音訊", extension: "aac", target_folder: "Media/Audio" },
-];
+export function get_default_extension_rules(): ExtensionRule[] {
+  const documents = t("categoryDocuments");
+  const archives = t("categoryArchives");
+  const images = t("categoryImages");
+  const video = t("categoryVideo");
+  const audio = t("categoryAudio");
+
+  return [
+    { name: documents, extension: "pdf", target_folder: "Documents" },
+    { name: documents, extension: "doc", target_folder: "Documents" },
+    { name: documents, extension: "docx", target_folder: "Documents" },
+    { name: documents, extension: "xlsx", target_folder: "Documents" },
+    { name: documents, extension: "pptx", target_folder: "Documents" },
+    { name: archives, extension: "zip", target_folder: "Archives" },
+    { name: archives, extension: "rar", target_folder: "Archives" },
+    { name: archives, extension: "7z", target_folder: "Archives" },
+    { name: archives, extension: "tar", target_folder: "Archives" },
+    { name: archives, extension: "gz", target_folder: "Archives" },
+    { name: images, extension: "png", target_folder: "Media/Images" },
+    { name: images, extension: "jpg", target_folder: "Media/Images" },
+    { name: images, extension: "jpeg", target_folder: "Media/Images" },
+    { name: images, extension: "gif", target_folder: "Media/Images" },
+    { name: images, extension: "webp", target_folder: "Media/Images" },
+    { name: images, extension: "svg", target_folder: "Media/Images" },
+    { name: video, extension: "mp4", target_folder: "Media/Video" },
+    { name: video, extension: "mkv", target_folder: "Media/Video" },
+    { name: video, extension: "avi", target_folder: "Media/Video" },
+    { name: video, extension: "mov", target_folder: "Media/Video" },
+    { name: video, extension: "webm", target_folder: "Media/Video" },
+    { name: audio, extension: "mp3", target_folder: "Media/Audio" },
+    { name: audio, extension: "flac", target_folder: "Media/Audio" },
+    { name: audio, extension: "wav", target_folder: "Media/Audio" },
+    { name: audio, extension: "aac", target_folder: "Media/Audio" },
+  ];
+}
 
 export const fallback_folder = "Others";
