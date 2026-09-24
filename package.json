@@ -11,6 +11,7 @@
     "test:e2e": "bash scripts/run-e2e.sh",
     "test:serve": "node tests/helpers/serve_mock_sites.mjs",
     "pack": "bash scripts/pack-store.sh",
+    "pack:store": "bash scripts/pack-store.sh",
     "install:edge": "npm run build && bash scripts/install-edge.sh"
   },
   "devDependencies": {

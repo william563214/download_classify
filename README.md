@@ -100,10 +100,12 @@ Content Script 記錄：
 
 ## 權限
 
+與 `manifest.json` 一致：
+
 | 權限 | 用途 |
 |---|---|
 | `downloads` | 攔截下載、建議存檔路徑與檔名 |
-| `storage` | 規則與設定（local + session） |
+| `storage` | 規則與設定（`local` + `session`；不使用 `sync`，不上傳下載檔案） |
 | `tabs` | 取得下載分頁、opener 追蹤 |
 | `webNavigation` | 同分頁 A→B 導覽鏈 |
 | `windows` | 開啟詢問彈窗 |
@@ -117,7 +119,7 @@ Content Script 記錄：
 | 外連點擊、分頁脈絡、歸因候選 | `chrome.storage.session` |
 | 下載紀錄 | IndexedDB `download_classify_db` |
 
-**資料僅本機、不上傳**：上述皆留在使用者裝置／瀏覽器內，本專案不提供雲端同步或遙測上傳。隱私細節見下方與 `store/PRIVACY.md`。
+**資料僅本機、不上傳**：上述皆留在使用者裝置／瀏覽器內，本專案不提供雲端同步或遙測上傳。本擴充功能不使用 `chrome.storage.sync`。隱私細節見下方與 `store/PRIVACY.md`。
 
 ## 開發
 
@@ -130,6 +132,7 @@ npm run test:unit    # Vitest 單元測試
 npm run test:e2e     # Playwright e2e（scripts/run-e2e.sh；Linux 無顯示時可選 xvfb）
 npm run test:serve   # 本機模擬站（tests/fixtures）
 npm run pack         # build 後產出 store/download-classify.zip
+npm run pack:store   # 同 pack（商店上架 zip）
 npm run install:edge # build 後提示於 Edge 載入 dist
 ```
 
@@ -140,13 +143,21 @@ npm run install:edge # build 後提示於 Edge 載入 dist
 
 ## 隱私
 
-所有資料僅存本機，不上傳外部伺服器。詳見 `store/PRIVACY.md`。
+所有資料僅存本機，不上傳外部伺服器；下載檔案亦不會被上傳。詳見 `store/PRIVACY.md`。
 
 ## 上架
 
-素材位於 `store/`，見 `store/README.md`。
+素材位於 `store/`，見 `store/README.md`、`store/PRIVACY.md`。
 
-- 打包產物：`store/download-classify.zip`（`npm run pack`）
+```bash
+npm run pack:store
+# 等同：npm run pack
+```
+
+產出 `store/download-classify.zip`。
+
+- 打包產物：`store/download-classify.zip`（`npm run pack:store`／`npm run pack`）
 - 擴充功能圖示：`public/icons/icon{16,32,48,128}.png`（向量原稿 `public/icons/icon.svg`）
 - 商店 logo：`store/icons/icon300.png`
 - 商店截圖（1280×800）：`store/screenshots/01`–`05`（`05` 檔名含 `-mock`，為 illustrative／非 live 擷取）
+- 權限說明與隱私文：`store/README.md`、`store/PRIVACY.md`
