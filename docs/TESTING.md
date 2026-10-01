@@ -86,9 +86,10 @@
 
 ### E5 硬規則 #3 斷言訊號
 
-- 無網站／網域規則，但有副檔名對照（例如 `.zip` → `Archives`）：紀錄 `matched_rule_id` 為 `ext:…`、`target_folder` 可為副檔名目標，但 **`is_unclassified === true`**，且出現分類詢問頁（`#page-title` 含「分類」或 `Classify`）。
+- 無網站／網域規則，但 storage 內有副檔名對照（例如 `.zip` → `Archives`）：下載完成後 **`is_unclassified === true`**，且 `matched_rule_id` 不得為 `site:…`（允許 `ext:…` 或啟發式的 `null`）。必須出現分類詢問頁（`#page-title` 含「分類」或 `Classify`）。
 - 無副檔名對照、僅啟發式／`Others`：`matched_rule_id === null` 且 **`is_unclassified === true`**，同樣開分類詢問。
-- 對照：有網站分類時即使同副檔名可命中，仍以 `site:` 為準且 **`is_unclassified === false`**。
+- 對照：有網站分類時即使同副檔名可命中，仍以 `site:` 為準且 **`is_unclassified === false`**，不開未分類詢問。
+- **Playwright 限制**：`acceptDownloads` 常把落盤檔名改成無副檔名 UUID，擴充在 `onDeterminingFilename` 可能拿不到 `.zip`，因而落到啟發式資料夾（例如 `Sites/fanbox.test`）。此仍屬硬規則 #3 的「僅啟發式」路徑；`ext:` 命中以 L1 單元測試為準，e2e 以「有副檔名規則也不當已分類／仍開詢問」為硬斷言。
 
 ## 7. 目錄與 scripts
 
