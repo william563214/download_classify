@@ -11,10 +11,10 @@
 
 ## P0 品質／可上架
 
-- [#1 P0: 跑通 build／typecheck／e2e，修壞掉的測試或腳本](https://github.com/william563214/download_classify/issues/1)
-- [#2 P0: 檢查並補齊 i18n（en／zh_TW）](https://github.com/william563214/download_classify/issues/2)
-- [#3 P0: 補齊圖示與 store 上架截圖素材](https://github.com/william563214/download_classify/issues/3)
-- [#4 P0: 上架 zip 流程文件＋權限／隱私文一致性](https://github.com/william563214/download_classify/issues/4)
+- [#1 P0: 跑通 build／typecheck／e2e，修壞掉的測試或腳本](https://github.com/william563214/download_classify/issues/1)（已完成：#17）
+- [#2 P0: 檢查並補齊 i18n（en／zh_TW）](https://github.com/william563214/download_classify/issues/2)（已完成：#18）
+- [#3 P0: 補齊圖示與 store 上架截圖素材](https://github.com/william563214/download_classify/issues/3)（已完成：#20）
+- [#4 P0: 上架 zip 流程文件＋權限／隱私文一致性](https://github.com/william563214/download_classify/issues/4)（已完成：#21）
 
 ## P1 已知產品缺口
 
@@ -35,6 +35,12 @@
 - [#13 P3: 評估並精簡 ＜all_urls＞ content script 負擔](https://github.com/william563214/download_classify/issues/13)
 - [#14 P3: chrome.storage.sync 同步規則（注意配額）](https://github.com/william563214/download_classify/issues/14)
 
+## 後續追蹤／測試
+
+- [#19 Follow-up: 硬規則 #3（副檔名／啟發式仍算未分類）補專屬 e2e](https://github.com/william563214/download_classify/issues/19)（已完成：#22）
+- [#23 test(L2): 用 chrome mock 驗證副檔名分支仍為未分類（ext:zip）](https://github.com/william563214/download_classify/issues/23)（未開始）
+- [#24 評估：onChanged 拿到檔名後是否補做分類](https://github.com/william563214/download_classify/issues/24)（未開始；僅更新紀錄，不搬檔）
+
 ## 協作備註
 
 - 優先以 cloud-agent PR 推進各 issue
@@ -43,4 +49,4 @@
 
 ## 建議下一步
 
-先從 [#1](https://github.com/william563214/download_classify/issues/1) 開始，讓 build／typecheck／e2e 全綠。
+P0 已完成；下一步從 [#5](https://github.com/william563214/download_classify/issues/5) 起推進 P1，測試後續追蹤見 [#23](https://github.com/william563214/download_classify/issues/23)、[#24](https://github.com/william563214/download_classify/issues/24)。
