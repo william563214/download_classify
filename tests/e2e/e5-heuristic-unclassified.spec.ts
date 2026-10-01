@@ -1,6 +1,9 @@
 import fs from "node:fs";
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import {
+  delay,
+  find_classify_pages,
+  get_chrome_downloads,
   launch_extension_context,
   mock_hosts,
   seed_storage,
@@ -23,13 +26,38 @@ const prompt_settings = {
   history_imported: true,
 } as const;
 
-function assert_unclassified_not_site_rule(record: Record<string, unknown>): void {
-  const rule_id = record.matched_rule_id;
-  // hard rule 3: extension / heuristic / Others are unclassified; site: is not
+/** Wait until classify.html has loaded the record (not just static chrome). */
+async function assert_classify_prompt_loaded(
+  classify_page: Page,
+  record: Record<string, unknown>
+): Promise<void> {
+  const download_id = record.download_id;
+  expect(download_id).toEqual(expect.any(Number));
+  expect(classify_page.url()).toContain(`download_id=${download_id}`);
+
+  await expect(classify_page.locator("#rule-form")).toBeVisible();
+  await expect(classify_page.locator("#not-found")).toBeHidden();
+  await expect(classify_page.locator("#info-category")).toContainText(
+    String(record.target_folder)
+  );
+}
+
+/**
+ * Hard-assert classification branch + folder for hard rule 3.
+ * Prefer ext:zip when Chromium supplies a .zip basename at classify time
+ * otherwise record the heuristic branch Playwright/CDP actually takes.
+ */
+function assert_extension_or_heuristic_branch(record: Record<string, unknown>): void {
   expect(record.is_unclassified).toBe(true);
-  if (rule_id != null) {
-    expect(String(rule_id)).not.toMatch(/^site:/);
+  const rule_id = record.matched_rule_id;
+  if (rule_id === "ext:zip") {
+    expect(record.target_folder).toBe("Archives");
+    return;
   }
+  // Branch taken under Playwright: onCreated filename is empty so classifier
+  // falls through to attributed-site heuristic before .zip arrives onChanged.
+  expect(rule_id).toBeNull();
+  expect(String(record.target_folder)).toMatch(/^Sites\//);
 }
 
 test.describe("e2e E5 hard rule 3 — extension/heuristic still unclassified", () => {
@@ -40,9 +68,9 @@ test.describe("e2e E5 hard rule 3 — extension/heuristic still unclassified", (
       await seed_storage(context, extension_id, {
         site_rules: [],
         rules: [],
-        // Extension rules are present so a zip *would* match by extension in a normal
-        // browser. Playwright may rewrite download basenames (UUID without .zip), in
-        // which case the classifier falls through to heuristic — still unclassified.
+        // Fixture is creator-pack.zip with Content-Disposition + download attr.
+        // Under Playwright/CDP, chrome.downloads.onCreated still sees filename ""
+        // so the live path is usually heuristic; ext:zip is asserted when present.
         extension_rules: [
           { name: "Archives", extension: "zip", target_folder: "Archives" },
         ],
@@ -57,14 +85,13 @@ test.describe("e2e E5 hard rule 3 — extension/heuristic still unclassified", (
           String(item.download_site || "").includes("fanbox") && item.state === "complete"
       );
 
-      assert_unclassified_not_site_rule(record);
-      const rule_id = record.matched_rule_id;
-      // Accept either ext: hit or heuristic/Others (matched_rule_id null)
-      expect(rule_id === null || String(rule_id).startsWith("ext:")).toBe(true);
+      const chrome_items = await get_chrome_downloads(service_worker);
+      expect(chrome_items.some((item) => item.url.includes("creator-pack.zip"))).toBe(true);
+
+      assert_extension_or_heuristic_branch(record);
 
       const classify_page = await wait_for_classify_page(context);
-      await expect(classify_page.locator("#page-title")).toContainText(/分類|Classify/);
-      await expect(classify_page.locator("#save-rule")).toBeVisible();
+      await assert_classify_prompt_loaded(classify_page, record);
     } finally {
       await context.close();
       fs.rmSync(user_data_dir, { recursive: true, force: true });
@@ -82,7 +109,7 @@ test.describe("e2e E5 hard rule 3 — extension/heuristic still unclassified", (
         settings: prompt_settings,
       });
 
-      // fantia fixture is .bin — no extension rule; classifier uses heuristic / Others
+      // fantia fixture is .bin — no extension rule; attributed-site heuristic → Sites/…
       await trigger_download_and_wait(mock_hosts.fantia, context);
 
       const record = await wait_for_download_record(
@@ -91,12 +118,12 @@ test.describe("e2e E5 hard rule 3 — extension/heuristic still unclassified", (
           String(item.download_site || "").includes("fantia") && item.state === "complete"
       );
 
-      assert_unclassified_not_site_rule(record);
       expect(record.matched_rule_id).toBeNull();
+      expect(record.is_unclassified).toBe(true);
+      expect(String(record.target_folder)).toMatch(/^Sites\//);
 
       const classify_page = await wait_for_classify_page(context);
-      await expect(classify_page.locator("#page-title")).toContainText(/分類|Classify/);
-      await expect(classify_page.locator("#save-rule")).toBeVisible();
+      await assert_classify_prompt_loaded(classify_page, record);
     } finally {
       await context.close();
       fs.rmSync(user_data_dir, { recursive: true, force: true });
@@ -134,14 +161,12 @@ test.describe("e2e E5 hard rule 3 — extension/heuristic still unclassified", (
           String(item.download_site || "").includes("fantia") && item.state === "complete"
       );
 
-      expect(String(record.matched_rule_id)).toContain("site:");
+      expect(record.matched_rule_id).toBe("site:site-fantia");
       expect(record.target_folder).toBe("Sites/Fantia");
       expect(record.is_unclassified).toBe(false);
 
-      // site hits must not open the unclassified classify UI
-      await expect(wait_for_classify_page(context, 2_500)).rejects.toThrow(
-        /timed out waiting for classify page/
-      );
+      await delay(1500);
+      expect(find_classify_pages(context).length).toBe(0);
     } finally {
       await context.close();
       fs.rmSync(user_data_dir, { recursive: true, force: true });

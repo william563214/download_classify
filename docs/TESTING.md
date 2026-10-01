@@ -79,17 +79,20 @@
 | E2 | 未分類下載（提示開啟） | 完成後出現分類詢問 | 同上 |
 | E3 | 詢問中建規則後再下同站 | 後續命中規則；**存規則不搬已下載檔** | `tests/e2e/e1-e4.spec.ts`（硬斷言） |
 | E4 | 歸因詢問站 A→B | 顯示候選；確認後寫歸因；**不搬已下載檔** | 同上（硬斷言，不可軟過） |
-| E5 | 僅副檔名／啟發式命中 | **仍算未分類**（`is_unclassified`）；開分類詢問；對照網站規則則已分類 | `tests/e2e/e5-heuristic-unclassified.spec.ts`（[#19](https://github.com/william563214/download_classify/issues/19) 硬規則 #3） |
+| E5 | 僅副檔名／啟發式命中 | **仍算未分類**（`is_unclassified`）；開分類詢問；對照網站規則則已分類。E5a 在 Playwright 下通常走啟發式分支（見下）；`ext:zip` 語意以 L1 為準 | `tests/e2e/e5-heuristic-unclassified.spec.ts`（[#19](https://github.com/william563214/download_classify/issues/19) 硬規則 #3） |
 | E6 | 非歸因詢問站下載 | 不彈歸因詢問 | 暫緩：非 #1 P0 硬規則；追蹤後續 issue／PR |
 | E7 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 暫緩：同上 |
 | E8 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 暫緩：同上 |
 
 ### E5 硬規則 #3 斷言訊號
 
-- 無網站／網域規則，但 storage 內有副檔名對照（例如 `.zip` → `Archives`）：下載完成後 **`is_unclassified === true`**，且 `matched_rule_id` 不得為 `site:…`（允許 `ext:…` 或啟發式的 `null`）。必須出現分類詢問頁（`#page-title` 含「分類」或 `Classify`）。
-- 無副檔名對照、僅啟發式／`Others`：`matched_rule_id === null` 且 **`is_unclassified === true`**，同樣開分類詢問。
-- 對照：有網站分類時即使同副檔名可命中，仍以 `site:` 為準且 **`is_unclassified === false`**，不開未分類詢問。
-- **Playwright 限制**：`acceptDownloads` 常把落盤檔名改成無副檔名 UUID，擴充在 `onDeterminingFilename` 可能拿不到 `.zip`，因而落到啟發式資料夾（例如 `Sites/fanbox.test`）。此仍屬硬規則 #3 的「僅啟發式」路徑；`ext:` 命中以 L1 單元測試為準，e2e 以「有副檔名規則也不當已分類／仍開詢問」為硬斷言。
+- **E5a**（storage 有 `.zip` → `Archives` 副檔名規則、無網站規則）：下載 fanbox fixture（`Content-Disposition` + `download="creator-pack.zip"`）。完成後 **`is_unclassified === true`**，並依實際分支硬斷言 `target_folder`：
+  - 若 `matched_rule_id === "ext:zip"` → `target_folder === "Archives"`
+  - 否則（Playwright／CDP 常見）→ `matched_rule_id === null` 且 `target_folder` 符合 `/^Sites\//`（歸因站啟發式）
+- **為何 e2e 常走啟發式而非 `ext:`**：Chromium 在 `chrome.downloads.onCreated`（與 determining-filename）時 `filename` 為空字串；真正的 `…/creator-pack.zip` 要到後續 `onChanged` 才出現。產品不會在檔名晚到後重跑分類，故自動化路徑鎖在啟發式。fixture 已盡力保留 `.zip`（標頭／`download` 屬性）；**`ext:zip` → 仍未分類** 的語意以 L1（`tests/unit/unclassified.test.ts`／`classifier.test.ts`）為 source of truth。
+- **E5b**（無副檔名規則）：`matched_rule_id === null`、`target_folder` 符合 `/^Sites\//`、**`is_unclassified === true`**。
+- 分類詢問頁（E5a／E5b）：URL 含對應 `download_id`；`#rule-form` 可見、`#not-found` 隱藏、`#info-category` 含 `target_folder`（避免只斷言靜態 `#page-title`／`#save-rule`）。
+- **E5c** 對照：`matched_rule_id === "site:site-fantia"`、**`is_unclassified === false`**；延遲後 `find_classify_pages().length === 0`。
 
 ## 7. 目錄與 scripts
 
