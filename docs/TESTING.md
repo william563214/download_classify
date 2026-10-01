@@ -71,7 +71,7 @@
 - 匯出 JSON：僅 `rules`／`site_rules`／`extension_rules`，不含 rename／attribution
 - **確認歸因／存規則不觸發搬檔**（對照 [#6](https://github.com/william563214/download_classify/issues/6)）
 
-## 6. L3 e2e 關鍵路徑（E1–E7）
+## 6. L3 e2e 關鍵路徑（E1–E8）
 
 | ID | 路徑 | 預期 | 自動化 |
 |---|---|---|---|
@@ -79,9 +79,16 @@
 | E2 | 未分類下載（提示開啟） | 完成後出現分類詢問 | 同上 |
 | E3 | 詢問中建規則後再下同站 | 後續命中規則；**存規則不搬已下載檔** | `tests/e2e/e1-e4.spec.ts`（硬斷言） |
 | E4 | 歸因詢問站 A→B | 顯示候選；確認後寫歸因；**不搬已下載檔** | 同上（硬斷言，不可軟過） |
-| E5 | 非歸因詢問站下載 | 不彈歸因詢問 | 暫緩：非 #1 P0 硬規則；追蹤後續 issue／PR |
-| E6 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 暫緩：同上 |
-| E7 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 暫緩：同上 |
+| E5 | 僅副檔名／啟發式命中 | **仍算未分類**（`is_unclassified`）；開分類詢問；對照網站規則則已分類 | `tests/e2e/e5-heuristic-unclassified.spec.ts`（[#19](https://github.com/william563214/download_classify/issues/19) 硬規則 #3） |
+| E6 | 非歸因詢問站下載 | 不彈歸因詢問 | 暫緩：非 #1 P0 硬規則；追蹤後續 issue／PR |
+| E7 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 暫緩：同上 |
+| E8 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 暫緩：同上 |
+
+### E5 硬規則 #3 斷言訊號
+
+- 無網站／網域規則，但有副檔名對照（例如 `.zip` → `Archives`）：紀錄 `matched_rule_id` 為 `ext:…`、`target_folder` 可為副檔名目標，但 **`is_unclassified === true`**，且出現分類詢問頁（`#page-title` 含「分類」或 `Classify`）。
+- 無副檔名對照、僅啟發式／`Others`：`matched_rule_id === null` 且 **`is_unclassified === true`**，同樣開分類詢問。
+- 對照：有網站分類時即使同副檔名可命中，仍以 `site:` 為準且 **`is_unclassified === false`**。
 
 ## 7. 目錄與 scripts
 
@@ -150,6 +157,6 @@ Chrome 啟動參數會把下列主機指到 `127.0.0.1`：
 
 - [x] `npm run typecheck` 與 `npm run build` 通過
 - [x] `npm run test:unit` 覆蓋 matcher／classifier／unclassified／filename／優先序等核心
-- [x] `npm run test:e2e` 至少覆蓋 **E1–E4**（含 E3／E4 **不搬檔硬斷言**；腳本與 fixtures 已進版控）
+- [x] `npm run test:e2e` 至少覆蓋 **E1–E4**（含 E3／E4 **不搬檔硬斷言**；腳本與 fixtures 已進版控）；**E5** 硬規則 #3（副檔名／啟發式仍未分類）見 [#19](https://github.com/william563214/download_classify/issues/19)
 - [x] fixtures／腳本不**唯獨**依賴被 gitignore 的 `.temp/`（正式路徑為 `tests/`）
 - [x] 文件明示：**資料僅本機／不上傳**；`.temp/` 僅本機 scratch
