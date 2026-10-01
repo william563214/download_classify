@@ -71,7 +71,7 @@
 - 匯出 JSON：僅 `rules`／`site_rules`／`extension_rules`，不含 rename／attribution
 - **確認歸因／存規則不觸發搬檔**（對照 [#6](https://github.com/william563214/download_classify/issues/6)）
 
-## 6. L3 e2e 關鍵路徑（E1–E7）
+## 6. L3 e2e 關鍵路徑（E1–E8）
 
 | ID | 路徑 | 預期 | 自動化 |
 |---|---|---|---|
@@ -79,9 +79,20 @@
 | E2 | 未分類下載（提示開啟） | 完成後出現分類詢問 | 同上 |
 | E3 | 詢問中建規則後再下同站 | 後續命中規則；**存規則不搬已下載檔** | `tests/e2e/e1-e4.spec.ts`（硬斷言） |
 | E4 | 歸因詢問站 A→B | 顯示候選；確認後寫歸因；**不搬已下載檔** | 同上（硬斷言，不可軟過） |
-| E5 | 非歸因詢問站下載 | 不彈歸因詢問 | 暫緩：非 #1 P0 硬規則；追蹤後續 issue／PR |
-| E6 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 暫緩：同上 |
-| E7 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 暫緩：同上 |
+| E5 | 僅副檔名／啟發式命中 | **仍算未分類**（`is_unclassified`）；開分類詢問；對照網站規則則已分類。E5a 在 Playwright 下通常走啟發式分支（見下）；`ext:zip` 語意以 L1 為準 | `tests/e2e/e5-heuristic-unclassified.spec.ts`（[#19](https://github.com/william563214/download_classify/issues/19) 硬規則 #3） |
+| E6 | 非歸因詢問站下載 | 不彈歸因詢問 | 暫緩：非 #1 P0 硬規則；追蹤後續 issue／PR |
+| E7 | Popup 存當前網站分類 | 設定生效；後續下載走網站分類 | 暫緩：同上 |
+| E8 | 設定頁 JSON 匯出 | 範圍僅規則三類；無 rename／attribution | 暫緩：同上 |
+
+### E5 硬規則 #3 斷言訊號
+
+- **E5a**（storage 有 `.zip` → `Archives` 副檔名規則、無網站規則）：下載 fanbox fixture（`Content-Disposition` + `download="creator-pack.zip"`）。完成後 **`is_unclassified === true`**，並依實際分支硬斷言 `target_folder`：
+  - 若 `matched_rule_id === "ext:zip"` → `target_folder === "Archives"`
+  - 否則（Playwright／CDP 常見）→ `matched_rule_id === null` 且 `target_folder` 符合 `/^Sites\//`（歸因站啟發式）
+- **為何 e2e 常走啟發式而非 `ext:`**：Chromium 在 `chrome.downloads.onCreated`（與 determining-filename）時 `filename` 為空字串；真正的 `…/creator-pack.zip` 要到後續 `onChanged` 才出現。產品不會在檔名晚到後重跑分類，故自動化路徑鎖在啟發式。fixture 已盡力保留 `.zip`（標頭／`download` 屬性）；**`ext:zip` → 仍未分類** 的語意以 L1（`tests/unit/unclassified.test.ts`／`classifier.test.ts`）為 source of truth。
+- **E5b**（無副檔名規則）：`matched_rule_id === null`、`target_folder` 符合 `/^Sites\//`、**`is_unclassified === true`**。
+- 分類詢問頁（E5a／E5b）：URL 含對應 `download_id`；`#rule-form` 可見、`#not-found` 隱藏、`#info-category` 含 `target_folder`（避免只斷言靜態 `#page-title`／`#save-rule`）。
+- **E5c** 對照：`matched_rule_id === "site:site-fantia"`、**`is_unclassified === false`**；延遲後 `find_classify_pages().length === 0`。
 
 ## 7. 目錄與 scripts
 
@@ -150,6 +161,6 @@ Chrome 啟動參數會把下列主機指到 `127.0.0.1`：
 
 - [x] `npm run typecheck` 與 `npm run build` 通過
 - [x] `npm run test:unit` 覆蓋 matcher／classifier／unclassified／filename／優先序等核心
-- [x] `npm run test:e2e` 至少覆蓋 **E1–E4**（含 E3／E4 **不搬檔硬斷言**；腳本與 fixtures 已進版控）
+- [x] `npm run test:e2e` 至少覆蓋 **E1–E4**（含 E3／E4 **不搬檔硬斷言**；腳本與 fixtures 已進版控）；**E5** 硬規則 #3（副檔名／啟發式仍未分類）見 [#19](https://github.com/william563214/download_classify/issues/19)
 - [x] fixtures／腳本不**唯獨**依賴被 gitignore 的 `.temp/`（正式路徑為 `tests/`）
 - [x] 文件明示：**資料僅本機／不上傳**；`.temp/` 僅本機 scratch
